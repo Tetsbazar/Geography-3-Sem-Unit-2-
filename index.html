@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Bazar — Geography 3rd Sem | Unit 2 | Ch 2 | বহির্জাত প্রক্রিয়াসমূহ</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Bangla&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Syne',sans-serif;background:#f0faf4;min-height:100vh;color:#1c2e24}
+.top-bar{background:#1a7a4a;padding:0.8rem 1.5rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100}
+.top-logo{font-size:1.1rem;font-weight:800;color:white}.top-logo span{color:#f9a825}
+.timer-box{background:rgba(255,255,255,0.15);border-radius:8px;padding:0.4rem 1rem;display:flex;align-items:center;gap:6px;font-size:1rem;font-weight:700;color:white}
+.timer-box.danger{background:#dc3545}
+.main{max-width:820px;margin:0 auto;padding:1.5rem 1rem}
+.hub-header{text-align:center;margin-bottom:2rem}
+.hub-header h1{font-family:'Tiro Bangla',serif;font-size:1.8rem;color:#1c2e24}
+.hub-header p{font-family:'Tiro Bangla',serif;font-size:0.95rem;color:#5a7a66;margin-top:0.3rem}
+.set-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem}
+.set-card{background:white;border-radius:14px;padding:1.5rem;border:1.5px solid #c5dccb;transition:all 0.2s;cursor:pointer;color:#1c2e24;box-shadow:0 2px 8px rgba(26,122,74,0.06)}
+.set-card:hover{transform:translateY(-3px);border-color:#1a7a4a;box-shadow:0 6px 20px rgba(26,122,74,0.12)}
+.set-card .icon{font-size:2.2rem;margin-bottom:0.3rem}
+.set-card .set-num{font-weight:700;font-size:1.1rem;color:#1a7a4a}
+.set-card .set-title{font-family:'Tiro Bangla',serif;font-size:0.85rem;color:#5a7a66;margin:0.2rem 0 0.5rem}
+.set-card .set-meta{display:flex;gap:1rem;font-size:0.7rem;color:#5a7a66}
+.set-card .set-meta span{background:#f0faf4;padding:0.15rem 0.6rem;border-radius:4px}
+.quiz-info{background:white;border-radius:12px;padding:1rem 1.2rem;margin-bottom:1.2rem;border:1px solid #c5dccb;display:flex;gap:1rem;flex-wrap:wrap}
+.info-item{font-family:'Tiro Bangla',serif;font-size:0.85rem;color:#5a7a66}
+.info-item strong{color:#1a7a4a}
+.progress-wrap{background:#c5dccb;border-radius:4px;height:6px;margin-bottom:1.2rem;overflow:hidden}
+.progress-fill{height:100%;background:#1a7a4a;border-radius:4px;transition:width 0.3s}
+.q-card{background:white;border-radius:14px;padding:1.4rem;margin-bottom:1rem;border:1px solid #c5dccb;box-shadow:0 2px 10px rgba(26,122,74,0.06)}
+.q-num{font-size:0.75rem;font-weight:700;color:#e8730a;letter-spacing:1px;text-transform:uppercase;margin-bottom:0.6rem}
+.q-text{font-family:'Tiro Bangla',serif;font-size:1rem;color:#1c2e24;line-height:1.7;margin-bottom:1.1rem}
+.opts{display:flex;flex-direction:column;gap:0.6rem}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:0.7rem 1rem;border:1.5px solid #c5dccb;border-radius:10px;cursor:pointer;transition:all 0.15s;background:white;text-align:left;width:100%;font-family:inherit}
+.opt:hover:not(.disabled){border-color:#1a7a4a;background:#f0faf4}
+.opt-circle{min-width:28px;height:28px;border-radius:50%;border:1.5px solid #c5dccb;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#5a7a66;flex-shrink:0;transition:all 0.15s}
+.opt-text{font-family:'Tiro Bangla',serif;font-size:0.92rem;color:#1c2e24;line-height:1.6;padding-top:2px}
+.opt.correct{border-color:#1a7a4a;background:#e8f7ef}
+.opt.correct .opt-circle{background:#1a7a4a;border-color:#1a7a4a;color:white}
+.opt.wrong{border-color:#dc3545;background:#fdf0f0}
+.opt.wrong .opt-circle{background:#dc3545;border-color:#dc3545;color:white}
+.opt.disabled{cursor:default}
+.explanation{background:#f0faf4;border-left:3px solid #1a7a4a;border-radius:0 8px 8px 0;padding:0.8rem 1rem;margin-top:0.8rem;display:none}
+.explanation.show{display:block}
+.explanation p{font-family:'Tiro Bangla',serif;font-size:0.88rem;color:#2c4035;line-height:1.7}
+.explanation strong{color:#1a7a4a}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:0.8rem}
+.score-show{font-family:'Tiro Bangla',serif;font-size:0.85rem;color:#5a7a66}
+.next-btn{background:#1a7a4a;color:white;border:none;padding:0.6rem 1.4rem;border-radius:8px;font-family:'Tiro Bangla',serif;font-size:0.9rem;cursor:pointer;transition:all 0.15s}
+.next-btn:hover{background:#2aad68}
+.next-btn:disabled{background:#c5dccb;cursor:default}
+.result-wrap{background:white;border-radius:14px;padding:2rem;text-align:center;border:1px solid #c5dccb;display:none}
+.result-wrap.show{display:block}
+.result-icon{font-size:3rem;margin-bottom:0.5rem}
+.result-score{font-size:3.5rem;font-weight:800;color:#1a7a4a}
+.result-total{font-size:1rem;color:#5a7a66;margin-bottom:0.5rem;font-family:'Tiro Bangla',serif}
+.result-grade{font-size:1.2rem;font-weight:600;color:#1c2e24;margin-bottom:1.5rem;font-family:'Tiro Bangla',serif}
+.result-bars{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.8rem;margin-bottom:1.5rem}
+.result-bar{background:#f0faf4;border-radius:10px;padding:0.8rem;text-align:center}
+.rb-num{font-size:1.4rem;font-weight:800}
+.rb-label{font-family:'Tiro Bangla',serif;font-size:0.8rem;color:#5a7a66;margin-top:0.2rem}
+.retry-btn{background:#1a7a4a;color:white;border:none;padding:0.75rem 2rem;border-radius:8px;font-family:'Tiro Bangla',serif;font-size:1rem;cursor:pointer;margin-right:0.5rem}
+.review-btn{background:white;color:#1a7a4a;border:1.5px solid #1a7a4a;padding:0.75rem 2rem;border-radius:8px;font-family:'Tiro Bangla',serif;font-size:1rem;cursor:pointer}
+.back-btn{background:white;color:#5a7a66;border:1.5px solid #c5dccb;padding:0.75rem 2rem;border-radius:8px;font-family:'Tiro Bangla',serif;font-size:1rem;cursor:pointer;margin-top:0.6rem}
+.start-wrap{background:white;border-radius:14px;padding:2rem;text-align:center;border:1px solid #c5dccb}
+.start-wrap h2{font-family:'Tiro Bangla',serif;font-size:1.4rem;color:#1c2e24;margin-bottom:0.5rem}
+.start-wrap p{font-family:'Tiro Bangla',serif;font-size:0.9rem;color:#5a7a66;line-height:1.7;margin-bottom:1.2rem}
+.start-info{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.5rem}
+.si{background:#f0faf4;border-radius:10px;padding:0.8rem;text-align:center}
+.si-num{font-size:1.4rem;font-weight:800;color:#1a7a4a}
+.si-label{font-family:'Tiro Bangla',serif;font-size:0.8rem;color:#5a7a66}
+.start-btn{background:#1a7a4a;color:white;border:none;padding:0.85rem 2.5rem;border-radius:10px;font-family:'Tiro Bangla',serif;font-size:1.05rem;cursor:pointer;box-shadow:0 4px 15px rgba(26,122,74,0.3)}
+.start-btn:hover{background:#2aad68}
+.start-btn:disabled{background:#c5dccb;cursor:not-allowed;box-shadow:none}
+.login-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999;display:none}
+.login-overlay.active{display:flex}
+.login-modal{background:white;border-radius:16px;padding:2.5rem;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.login-modal h2{font-family:'Tiro Bangla',serif;font-size:1.3rem;color:#1c2e24;text-align:center;margin-bottom:0.3rem}
+.login-modal p{font-family:'Tiro Bangla',serif;font-size:0.85rem;color:#5a7a66;text-align:center;margin-bottom:1.5rem}
+.login-modal label{font-size:0.8rem;font-weight:600;color:#1c2e24;display:block;margin-bottom:0.3rem}
+.login-modal input{width:100%;padding:0.7rem 1rem;border:1.5px solid #c5dccb;border-radius:8px;font-size:0.95rem;margin-bottom:1rem;font-family:'Tiro Bangla',serif}
+.login-modal input:focus{outline:none;border-color:#1a7a4a}
+.login-modal .login-btn{width:100%;background:#1a7a4a;color:white;border:none;padding:0.75rem;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Tiro Bangla',serif}
+.login-modal .login-btn:hover{background:#2aad68}
+.login-modal .login-btn:disabled{background:#c5dccb;cursor:not-allowed}
+.login-modal .error-msg{color:#dc3545;font-size:0.8rem;text-align:center;margin-top:0.5rem;font-family:'Tiro Bangla',serif;display:none}
+.login-modal .limit-info{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:0.6rem 1rem;margin-bottom:1rem;font-family:'Tiro Bangla',serif;font-size:0.8rem;color:#856404;display:none}
+.login-modal .set-name-display{background:#f0faf4;border-radius:8px;padding:0.5rem;text-align:center;margin-bottom:1rem;font-family:'Tiro Bangla',serif;font-size:0.9rem;color:#1a7a4a;font-weight:600}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="top-logo">Test <span>Bazar</span></div>
+  <div class="timer-box" id="timerBox">⏱ <span id="timerDisplay">10:00</span></div>
+</div>
+
+<div class="main">
+
+  <!-- ===== LOGIN OVERLAY ===== -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-modal">
+      <h2>🔐 লগইন করুন</h2>
+      <p>Test শুরু করতে আপনার ইউজারনেম ও পাসওয়ার্ড দিন</p>
+      <div class="set-name-display" id="loginSetName">📚 Set 1</div>
+      <div class="limit-info" id="limitInfo">⚠️ <span id="limitMsg"></span></div>
+      <label>ইউজারনেম</label>
+      <input type="text" id="loginUsername" placeholder="আপনার ইউজারনেম লিখুন">
+      <label>পাসওয়ার্ড</label>
+      <input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড লিখুন" onkeydown="if(event.key==='Enter') doLoginFromSet()">
+      <button class="login-btn" id="loginBtn" onclick="doLoginFromSet()">✅ লগইন করে Test শুরু করো</button>
+      <div class="error-msg" id="loginError">❌ ভুল ইউজারনেম বা পাসওয়ার্ড। আবার চেষ্টা করুন।</div>
+    </div>
+  </div>
+
+  <!-- ===== HUB PAGE ===== -->
+  <div id="hubPage">
+    <div class="hub-header">
+      <h1>📚 Unit 2 — ভূমিরূপ গঠনকারী প্রক্রিয়া: বহির্জাত প্রক্রিয়াসমূহ</h1>
+      <p>অধ্যায় ২: পুঞ্জক্ষয়, হিমবাহ ও কার্স্ট ভূমিরূপ — নিচের সেটগুলো থেকে বেছে নিন। Test শুরু করতে সেটে ক্লিক করুন এবং লগইন করুন।</p>
+      <div id="hubUserInfo" style="font-family:'Tiro Bangla',serif;font-size:0.85rem;color:#5a7a66;margin-top:0.5rem;"></div>
+    </div>
+    <div class="set-grid" id="setGrid"></div>
+  </div>
+
+  <!-- ===== TEST AREA ===== -->
+  <div id="testArea" class="hidden">
+    <div class="quiz-info">
+      <div class="info-item">🎓 <strong id="testSetName">ভূগোল</strong> — Unit 2 | Ch 2 | <span id="testSetLabel">Set 1</span></div>
+      <div class="info-item">📝 <span id="testTopic">বহির্জাত প্রক্রিয়াসমূহ</span></div>
+    </div>
+    <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="q-card" id="qCard">
+      <div class="q-num" id="qNum">প্রশ্ন ১ / ১৫</div>
+      <div class="q-text" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+      <div class="explanation" id="explanation"><p id="explanationText"></p></div>
+      <div class="nav-row">
+        <div class="score-show" id="scoreShow">সঠিক: ০ | ভুল: ০</div>
+        <button class="next-btn" id="nextBtn" onclick="nextQ()" disabled>পরবর্তী →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESULT AREA ===== -->
+  <div class="result-wrap" id="resultWrap">
+    <div class="result-icon" id="resultIcon"></div>
+    <div class="result-score" id="finalScore"></div>
+    <div class="result-total">/ ১৫</div>
+    <div class="result-grade" id="resultGrade"></div>
+    <div class="result-bars">
+      <div class="result-bar"><div class="rb-num" id="rbCorrect" style="color:#1a7a4a"></div><div class="rb-label">সঠিক</div></div>
+      <div class="result-bar"><div class="rb-num" id="rbWrong" style="color:#dc3545"></div><div class="rb-label">ভুল</div></div>
+      <div class="result-bar"><div class="rb-num" id="rbPct" style="color:#e8730a"></div><div class="rb-label">স্কোর</div></div>
+    </div>
+    <div id="attemptInfo" style="font-family:'Tiro Bangla',serif;font-size:0.85rem;color:#5a7a66;margin-bottom:1rem;"></div>
+    <button class="retry-btn" onclick="startQuiz(currentSetId)">আবার চেষ্টা করো</button>
+    <button class="review-btn" onclick="showReview()">উত্তর দেখো</button>
+    <br>
+    <button class="back-btn" onclick="goToHub()">← Hub এ ফিরে যাও</button>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+//  ইউজার ডেটাবেস (সব username/password একই থাকবে)
+// ============================================================
+const MAX_ATTEMPTS = 10;
+const TOTAL_SETS = 10;
+
+const userData = [
+  {username:"alfa_romeo", password:"ARx7P29m", attempts:{}},
+  {username:"santos", password:"St8Qv41L", attempts:{}},
+  {username:"falcon", password:"Fc3MZ92k", attempts:{}},
+  {username:"titan", password:"Ti6Rp84W", attempts:{}},
+  {username:"matrix", password:"Mx5Kd73N", attempts:{}},
+  {username:"phoenix", password:"Ph9Js28V", attempts:{}},
+  {username:"cobra", password:"Cb4Ln65X", attempts:{}},
+  {username:"shadow", password:"Sh7Wp19Q", attempts:{}},
+  {username:"rocket", password:"Rc2Ty86M", attempts:{}},
+  {username:"warrior", password:"Wr8Az34K", attempts:{}},
+  {username:"eagle", password:"Eg5Xq72P", attempts:{}},
+  {username:"thunder", password:"Th1Vk93R", attempts:{}},
+  {username:"dragon", password:"Dr6Hm48N", attempts:{}},
+  {username:"panther", password:"Pa9Nc25J", attempts:{}},
+  {username:"viking", password:"Vi4Qs87L", attempts:{}},
+  {username:"hunter", password:"Hu7Bp31X", attempts:{}},
+  {username:"legend", password:"Le2Mz64T", attempts:{}},
+  {username:"ranger", password:"Ra8Kd95W", attempts:{}},
+  {username:"knight", password:"Kn3Xp57Q", attempts:{}},
+  {username:"turbo", password:"Tu6Lv21N", attempts:{}},
+  {username:"alpha", password:"Ap9Rm83K", attempts:{}},
+  {username:"bravo", password:"Br5Yt42M", attempts:{}},
+  {username:"charlie", password:"Ch7Wq16P", attempts:{}},
+  {username:"delta", password:"De4Nk78X", attempts:{}},
+  {username:"echo", password:"Ec8Jp35V", attempts:{}},
+  {username:"foxtrot", password:"Fx2Lm94Q", attempts:{}},
+  {username:"gamma", password:"Ga6Xs27T", attempts:{}},
+  {username:"helix", password:"He1Vp85N", attempts:{}},
+  {username:"inferno", password:"In9Qk43L", attempts:{}},
+  {username:"jaguar", password:"Ja5Mz72W", attempts:{}},
+  {username:"karma", password:"Ka8Rp14X", attempts:{}},
+  {username:"laser", password:"La3Tn67Q", attempts:{}},
+  {username:"meteor", password:"Me7Wx29P", attempts:{}},
+  {username:"nova", password:"No4Kz86M", attempts:{}},
+  {username:"omega", password:"Om2Lp53V", attempts:{}},
+  {username:"pegasus", password:"Pe9Xq71N", attempts:{}},
+  {username:"quantum", password:"Qu5Vr38K", attempts:{}},
+  {username:"rebel", password:"Re8Mz24T", attempts:{}},
+  {username:"storm", password:"St1Kp97W", attempts:{}},
+  {username:"tornado", password:"To6Nx45Q", attempts:{}},
+  {username:"ultra", password:"Ul3Wp82M", attempts:{}},
+  {username:"vector", password:"Ve7Lq19X", attempts:{}},
+  {username:"wolf", password:"Wo4Rm63P", attempts:{}},
+  {username:"xenon", password:"Xe9Tk25N", attempts:{}},
+  {username:"yodha", password:"Yo2Vz78K", attempts:{}},
+  {username:"zeus", password:"Ze8Mp41Q", attempts:{}},
+  {username:"atlas", password:"At5Lx93W", attempts:{}},
+  {username:"blaze", password:"Bl1Qn67M", attempts:{}},
+  {username:"cyclone", password:"Cy7Rp34T", attempts:{}},
+  {username:"dynamo", password:"Dy4Wk82X", attempts:{}},
+  {username:"apollo", password:"Ap7Kx94Lm", attempts:{}},
+  {username:"archer", password:"Ar3Vp62Qn", attempts:{}},
+  {username:"asteroid", password:"As8Tm15Rw", attempts:{}},
+  {username:"bandit", password:"Ba5Qz71Kp", attempts:{}},
+  {username:"bison", password:"Bi9Ln34Xt", attempts:{}},
+  {username:"bullet", password:"Bu2Wr86Mv", attempts:{}},
+  {username:"canyon", password:"Ca6Xp29Qk", attempts:{}},
+  {username:"captain", password:"Cp1Mz75Ln", attempts:{}},
+  {username:"comet", password:"Co8Tk43Wp", attempts:{}},
+  {username:"cyclonex", password:"Cy4Vr92Km", attempts:{}},
+  {username:"diesel", password:"Di7Lp18Qx", attempts:{}},
+  {username:"domino", password:"Do3Wn67Rt", attempts:{}},
+  {username:"duke", password:"Du9Kx25Mv", attempts:{}},
+  {username:"empire", password:"Em5Qp84Ln", attempts:{}},
+  {username:"explorer", password:"Ex2Vz39Kt", attempts:{}},
+  {username:"fighter", password:"Fi8Lm71Qw", attempts:{}},
+  {username:"galaxy", password:"Ga4Tk26Xp", attempts:{}},
+  {username:"gladiator", password:"Gl7Wp95Mn", attempts:{}},
+  {username:"gravity", password:"Gr1Nx53Lq", attempts:{}},
+  {username:"hawk", password:"Ha9Kz42Rt", attempts:{}},
+  {username:"horizon", password:"Ho5Vm87Xp", attempts:{}},
+  {username:"icefire", password:"Ic3Lp16Qn", attempts:{}},
+  {username:"impact", password:"Im8Wr74Kt", attempts:{}},
+  {username:"ironman", password:"Ir2Xq95Mv", attempts:{}},
+  {username:"jetstar", password:"Je6Nk38Lp", attempts:{}},
+  {username:"kingston", password:"Ki1Vp72Qw", attempts:{}},
+  {username:"lightning", password:"Li9Tm45Rx", attempts:{}},
+  {username:"majestic", password:"Ma4Kp83Ln", attempts:{}},
+  {username:"monster", password:"Mo7Wz21Qt", attempts:{}},
+  {username:"neptune", password:"Ne3Lx96Mv", attempts:{}},
+  {username:"ninja", password:"Ni8Qr54Kp", attempts:{}},
+  {username:"orbit", password:"Or2Vp73Ln", attempts:{}},
+  {username:"patriot", password:"Pa6Tk18Qw", attempts:{}},
+  {username:"pioneer", password:"Pi1Xm85Rt", attempts:{}},
+  {username:"predator", password:"Pr9Lq47Kv", attempts:{}},
+  {username:"proton", password:"Pt4Wn62Mx", attempts:{}},
+  {username:"rapid", password:"Ra7Kx93Lp", attempts:{}},
+  {username:"samurai", password:"Sa3Vp25Qn", attempts:{}},
+  {username:"sniper", password:"Sn8Tm71Rw", attempts:{}},
+  {username:"solaris", password:"So2Qk84Mv", attempts:{}},
+  {username:"spartan", password:"Sp6Ln39Xt", attempts:{}},
+  {username:"striker", password:"St1Wr57Kp", attempts:{}},
+  {username:"summit", password:"Su9Xp26Lm", attempts:{}},
+  {username:"taurus", password:"Ta5Vz91Qw", attempts:{}},
+  {username:"tempest", password:"Te3Kp48Rt", attempts:{}},
+  {username:"trident", password:"Tr8Wm72Ln", attempts:{}},
+  {username:"valiant", password:"Va2Nx35Qk", attempts:{}},
+  {username:"voyager", password:"Vo6Lp97Mx", attempts:{}},
+  {username:"wildfire", password:"Wi1Tk64Rv", attempts:{}},
+  {username:"zenith", password:"Ze9Qx28Lp", attempts:{}}
+];
+
+// ============================================================
+//  সব সেটের ডেটা (Set 1-10 for Geography Chapter 2: বহির্জাত প্রক্রিয়াসমূহ)
+// ============================================================
+const allSets = {
+  1: {
+    name: 'Set 1',
+    icon: '🪨',
+    topic: 'পুঞ্জক্ষয় (Mass Wasting) — মূল ধারণা',
+    questions: [
+      {q: 'পুঞ্জক্ষয়ের (Mass Wasting) প্রধান নিয়ন্ত্রক বা চালিকা শক্তি কোনটি?', opts: ['বায়ুপ্রবাহ', 'জলস্রোত', 'অভিকর্ষজ বল', 'হিমবাহের চলন'], ans: 2, exp: 'প্রাকৃতিক মাধ্যমগুলি (যেমন জল, বায়ু বা বরফ) পুঞ্জক্ষয়কে সহায়তা করলেও এরা কখনোই পুঞ্জক্ষয় ঘটায় না। আবহবিকারগ্রস্ত শিলা বা মাটি উপর থেকে নীচে নেমে আসার প্রধান চালিকাশক্তি হলো পৃথিবীর অভিকর্ষজ বল বা মাধ্যাকর্ষণ শক্তি।'},
+      {q: '\'পুঞ্জক্ষয়\' কথাটির সুস্পষ্ট ও বিস্তৃত বৈজ্ঞানিক ব্যাখ্যা সর্বপ্রথম কোন বিজ্ঞানী প্রদান করেন?', opts: ['সি. এফ. এস. শার্প (C. F. S. Sharpe)', 'এ. এল. ব্লুম (A. L. Bloom)', 'আর. জে. চোরলে (R. J. Chorley)', 'এ. এল. ওয়াশবার্ন (A. L. Washburn)'], ans: 0, exp: '১৯৩৮ সালে ভূবিজ্ঞানী শার্প সর্বপ্রথম পুঞ্জক্ষয়ের প্রকৃতি সম্পর্কে বিস্তৃত সমীক্ষা করেন এবং একে ধীরপ্রবাহ, দ্রুতপ্রবাহ, ভূমিধস ও অবনমন- এই চারটি প্রধান ভাগে বিভক্ত করেন।'},
+      {q: 'উচ্চ অক্ষাংশে বা তুষারাবৃত অঞ্চলে জলসম্পৃক্ত মাটি ও শিলাখণ্ডের ঢাল বরাবর দ্রুত নেমে আসাকে কী বলে?', opts: ['সলিফ্লাকশন (Solifluction)', 'ট্যালাস বিসর্পণ (Talus creep)', 'শিলা প্রপাত (Rock fall)', 'কর্দম প্রবাহ (Mud flow)'], ans: 0, exp: 'চিরহিমায়িত অঞ্চলে গ্রীষ্মকালে মাটির ফাটলে জমে থাকা বরফ গলে জলে পরিণত হলে মৃত্তিকা সম্পৃক্ত হয়ে পড়ে। এই সম্পৃক্ত মাটি ও শিলাখণ্ড মাধ্যাকর্ষণের টানে দ্রুতগতিতে স্থানান্তরিত হলে তাকে সলিফ্লাকশন বলে।'},
+      {q: 'যে পুঞ্জক্ষয় প্রক্রিয়ায় শিলাখণ্ড ও আবহবিকারজাত পদার্থগুলি সোজা না পড়ে আবর্তনমুখী গতিবেগে বা ঘূর্ণনের মাধ্যমে ধসে পড়ে, তাকে কী বলে?', opts: ['রক স্লাইড বা শিলা ধস', 'স্লাম্প (Slump)', 'ভগ্নস্তূপ ধস', 'মৃত্তিকা পতন'], ans: 1, exp: 'এটি একটি আবর্তনশীল ভূমিধস। এক্ষেত্রে শিলাখণ্ডগুলি খাড়া ঢাল বরাবর পিছলে পড়ার সময় বস্তুর বিপরীত দিকে ঘূর্ণন বা আবর্তনাকারে (backward rotation) ধসে পড়ে।'},
+      {q: 'কানের লতির ন্যায় আকৃতিযুক্ত কর্দম প্রবাহের (Mud Flow) সম্মুখভাগকে কী বলা হয়?', opts: ['লহর', 'লেভি', 'লোব (Lobe)', 'ট্যালাস'], ans: 2, exp: 'পুঞ্জক্ষয়ে কর্দম প্রবাহ বা কাদা প্রবাহের ক্ষেত্রে হিমবাহ প্রবাহের শেষ প্রান্তে কানের লতির মতো আকৃতিবিশিষ্ট যে ঢালযুক্ত পিণ্ডাকৃতি ভূমিরূপের সৃষ্টি হয়, তাকে লোব বলা হয়।'},
+      {q: 'ক্যালিফোর্নিয়ার সিয়েরা-নেভাদা অঞ্চলে কোন প্রকার পুঞ্জক্ষয় বিশেষভাবে লক্ষ করা যায়?', opts: ['কর্দম প্রবাহ', 'শিলা পতন', 'ট্যালাস বিসর্পণ (Talus creep)', 'মৃত্তিকা প্রবাহ'], ans: 2, exp: 'পাহাড় ও পর্বতের গায়ে যান্ত্রিক আবহবিকারের ফলে সৃষ্ট কোণাকৃতি শিলাখণ্ডের স্তূপকে ট্যালাস বলে। এই ট্যালাস যখন অভিকর্ষের টানে খুব ধীরে ধীরে ঢাল বরাবর নীচে নামতে থাকে, তখন তাকে ট্যালাস বিসর্পণ বলে। সিয়েরা-নেভাদায় এটি খুব সাধারণ ঘটনা।'},
+      {q: 'খাড়াই ঢালে কোনো মাধ্যম ছাড়া শিলাস্তূপ মুক্ত অবস্থায় সোজাসুজি নীচে পতিত হলে তাকে কী বলে?', opts: ['বিসর্পণ', 'প্রপাত বা পতন (Fall)', 'স্লাম্প', 'অবনমন'], ans: 1, exp: 'অত্যন্ত খাড়া বা উল্লম্ব ঢাল থেকে যখন কোনো শিলাখণ্ড বা মৃত্তিকা কোনো মাধ্যমের সাহায্য ছাড়াই অভিকর্ষের টানে মুক্ত অবস্থায় (free fall) সরাসরি নীচে পড়ে যায়, তখন তাকে পতন বা প্রপাত বলে।'},
+      {q: 'মৃত্তিকা বিসর্পণের প্রভাবে ঢালের উপরিভাগে সৃষ্ট ছোটো ছোটো সিঁড়ির মতো ধাপগুলিকে কী বলা হয়?', opts: ['লহর', 'টেরাক্যাটস (Terracettes)', 'সলিফ্লাকশন মঞ্চ', 'শিলাশঙ্কু'], ans: 1, exp: 'পুঞ্জক্ষয়ের বিসর্পণ প্রক্রিয়ায় আকস্মিক পতনের প্রভাবে বিচ্যুত উপাদানসমূহ পিছনের দিকে ঘুরে যাওয়ার জন্য প্রধান ঢালের ওপরে কতকগুলি ক্ষুদ্র মঞ্চ বা ছোটো ছোটো ধাপের সৃষ্টি হয়, এগুলিকে টেরাক্যাটস বলে।'},
+      {q: 'দ্রুত প্রবাহের অন্যতম রূপ \'ভূমিপ্রবাহ\' বা Earth flow প্রধানত কোন জলবায়ু অঞ্চলে বেশি দেখা যায়?', opts: ['আর্দ্র অঞ্চলে', 'শুষ্ক অঞ্চলে', 'মরু অঞ্চলে', 'নিরক্ষীয় অঞ্চলে'], ans: 0, exp: 'ভূমিপ্রবাহ বা মৃত্তিকা প্রবাহ প্রধানত আর্দ্র অঞ্চলে গ্রীষ্মকালে দেখা যায়। প্রবল বৃষ্টিপাতের ফলে মৃত্তিকা জলের সংস্পর্শে সম্পৃক্ত হয়ে এই প্রবাহের সৃষ্টি করে। অন্যদিকে কর্দম প্রবাহ মূলত শুষ্ক অঞ্চলে ঘটে।'},
+      {q: 'খনিজ পদার্থ উত্তোলনের জন্য ভূগর্ভের গভীরে উপাদানের অপসারণ কিংবা গুহার ছাদ ধসে গর্তের সৃষ্টি হওয়া কোন পুঞ্জক্ষয় প্রক্রিয়ার উদাহরণ?', opts: ['স্খলন', 'অবনমন বা অবপাত (Subsidence)', 'শিলা ধস', 'মৃত্তিকা পতন'], ans: 1, exp: 'ভূমি ঢালের ওপর সঞ্চিত শিলাখণ্ড বা মৃত্তিকা ঢাল বরাবর না গড়িয়ে যখন সরাসরি উলম্বভাবে নীচের দিকে বসে যায়, তখন তাকে অবনমন বলে। খনির খাদ বা চুনাপাথরের গুহার ছাদ ধসে যাওয়া এর প্রকৃষ্ট উদাহরণ।'},
+      {q: 'চিরহিমায়িত অঞ্চলে পর্বতের পাদদেশে সলিফ্লাকশন প্রক্রিয়ায় সঞ্চিত শিলাখণ্ডের দ্বারা গঠিত ত্রিকোণাকার ভূমিরূপের বিশেষ নাম কী?', opts: ['ডেট্রিটাল ফ্যান (Detrital Fan)', 'শিলাশঙ্কু', 'লহর', 'ট্যালাস'], ans: 0, exp: 'পেরিগ্লেসিয়াল অঞ্চলে সলিফ্লাকশন প্রক্রিয়া খুব কার্যকরী। এই প্রক্রিয়ায় শিলাখণ্ডগুলি ঢাল বরাবর নীচে নেমে পর্বতের পাদদেশে বদ্বীপের মতো ত্রিকোণ আকৃতির যে সঞ্চয় সৃষ্টি করে, তাকে ডেট্রিটাল ফ্যান বলে।'},
+      {q: 'আগ্নেয়গিরির ছাই, ধুলো, বৃষ্টির জল কিংবা বরফগলা জলের সাথে পলি মিশে পর্বতের ঢালে যে কাদা প্রবাহের সৃষ্টি হয়, তাকে কী বলে?', opts: ['কেটল', 'লহর (Lahar)', 'এসকার', 'ডেকেন শটার'], ans: 1, exp: 'আগ্নেয়গিরির ঢালে বৃষ্টির জল বা বরফগলা জলের সাথে আগ্নেয়গিরির ছাই ও পলি মিশে যে কাদা প্রবাহ সৃষ্টি হয়, তাকে লহর বলে।'},
+      {q: 'পুঞ্জক্ষয়জাত পদার্থ যখন কোনো কারণে অনুভূমিক স্তরে এসে পৌঁছায় এবং অনুভূমিক ভূপৃষ্ঠের সাথে যে কোণ তৈরি করে, তাকে কী বলে?', opts: ['রিপোজ কোণ (Angle of Repose)', 'ক্রিভাস', 'ঢাল কোণ', 'সলিফ্লাকশন কোণ'], ans: 0, exp: 'পুঞ্জক্ষয়জাত পদার্থ অনুভূমিক স্তরে এসে পৌঁছালে শঙ্কু আকৃতির স্তূপ গঠিত হয়। এই স্তূপাকৃতি পদার্থসমূহ অনুভূমিক ভূপৃষ্ঠে যে কোণ তৈরি করে, তাকে রিপোজ কোণ বা বিশ্রাম কোণ বলে।'},
+      {q: 'হিমবাহ অধ্যুষিত অঞ্চলের প্রান্তে তুষারগলা জলে সম্পৃক্ত মৃত্তিকার সক্রিয় স্তরটি প্রবাহিত হলে তাকে কী বলে?', opts: ['লহর', 'জেলিফ্লাকশন (Gelifluction)', 'শিলা বিসর্পণ', 'স্লাম্প'], ans: 1, exp: 'হিমবাহ অধ্যুষিত অঞ্চলের প্রান্তে ভর সঞ্চলনের এক বিশেষ ধরনের সলিফ্লাকশন প্রক্রিয়াকে জেলিফ্লাকশন বলে। এক্ষেত্রে তুষারগলা জলে সম্পৃক্ত মৃত্তিকার সক্রিয় স্তরটি প্রবাহিত হয়ে থাকে।'},
+      {q: 'ঢালু ভূমিভাগের ওপরে অবস্থিত শিথিল পদার্থসমূহের অভিকর্ষজ বলের প্রভাবে নীচের দিকে অত্যন্ত ধীর গতিতে গমনকে কী বলে?', opts: ['দ্রুত প্রবাহ', 'ভূমি ধস', 'ধীর প্রবাহ বা বিসর্পণ (Creep)', 'অবনমন'], ans: 2, exp: 'আবহবিকারগ্রস্ত বিচূর্ণীকৃত শিলাখণ্ড ও মৃত্তিকা মাধ্যাকর্ষণ শক্তির নিরিখে অত্যন্ত ধীর গতিতে উপর থেকে নীচের দিকে নামলে তাকে ধীর প্রবাহ বা বিসর্পণ বলা হয়।'}
+    ]
+  },
+  2: {
+    name: 'Set 2',
+    icon: '🏔️',
+    topic: 'পুঞ্জক্ষয় ও হিমবাহ (Mass Wasting & Glaciers)',
+    questions: [
+      {q: 'বিজ্ঞানী শার্প পুঞ্জক্ষয়কে মূলত কয়টি প্রধান ভাগে ভাগ করেছেন?', opts: ['তিনটি', 'চারটি', 'পাঁচটি', 'ছয়টি'], ans: 1, exp: 'ভূবিজ্ঞানী শার্প ১৯৩৮ সালে পুঞ্জক্ষয় বিষয়টিকে বিভিন্নভাবে সমীক্ষা করেন এবং চারটি ধরন তুলে ধরেন: ধীরপ্রবাহ (creep), দ্রুতপ্রবাহ (flow), ভূমিধস (landslide) এবং অবনমন (subsidence)।'},
+      {q: 'খাড়া ঢালের উপরের অংশ থেকে শিলাখণ্ড বা বৃহৎ প্রস্তরখণ্ডের হঠাৎ নীচের দিকে পতনকে কী বলে?', opts: ['শিলা সম্প্রপাত (Debris Avalanches)', 'ট্যালাস বিসর্পণ', 'মৃত্তিকা পতন', 'অবনমন'], ans: 0, exp: 'খাড়া ঢালের উপরের অংশ থেকে শিলাখণ্ড বা বৃহৎ প্রস্তরখণ্ডের হঠাৎ নীচের দিকে পতনকে শিলা সম্প্রপাত বলে। উচ্চ পার্বত্য অঞ্চলে শিলা এবং তুষারের সম্প্রপাত প্রায়ই লক্ষ করা যায়।'},
+      {q: 'শিলার পুঞ্জক্ষয়ের জন্য প্রধানত দায়ী বল কোনটি?', opts: ['বায়ুপ্রবাহ', 'জলস্রোত', 'অভিকর্ষজ বল', 'শিলার অনুষঙ্গ'], ans: 2, exp: 'প্রাকৃতিক মাধ্যমগুলি ছাড়াও শুধু অভিকর্ষজ বলের প্রভাবে শিলাখণ্ডসমূহ উপর থেকে নীচে স্থানান্তরিত হয়, যা পুঞ্জক্ষয়ের মূল চালিকাশক্তি।'},
+      {q: 'মৃত্তিকা প্রবাহ বা Earth flow-এর ঢাল সাধারণত কত থাকে?', opts: ['২ থেকে ৩৫ ডিগ্রি', '৬০ থেকে ৭৫ ডিগ্রি', '৪০ থেকে ৫০ ডিগ্রি', '৮০ থেকে ৯০ ডিগ্রি'], ans: 0, exp: 'ভূমিপ্রবাহ প্রধানত আর্দ্র অঞ্চলে লক্ষ করা যায় এবং এর ঢাল খুব কম হয়, প্রায় ২ থেকে ৩৫ ডিগ্রির মধ্যে থাকে।'},
+      {q: 'কর্দম প্রবাহ বা Mud flow-এর ঢাল সাধারণত কত হয়?', opts: ['২ থেকে ৩৫ ডিগ্রি', '১৫ থেকে ২৫ ডিগ্রি', '৬০ থেকে ৭৫ ডিগ্রি', '০ থেকে ৫ ডিগ্রি'], ans: 2, exp: 'কর্দম প্রবাহ প্রধানত শুষ্ক অঞ্চলে লক্ষ করা যায় এবং এর ঢাল যথেষ্ট বেশি হয়, প্রায় ৬০ থেকে ৭৫ ডিগ্রির মধ্যে থাকে।'},
+      {q: 'আল্পস অঞ্চলে সর্বশেষ হিমযুগ কোনটি ছিল, যা প্রায় ২৫ থেকে ১০ লক্ষ বছর আগে এসেছিল বলে বিজ্ঞানীরা প্রমাণ পেয়েছেন?', opts: ['গুনৎস (Gunz)', 'মিন্ডেল (Mindel)', 'রিস (Riss)', 'উর্ম (Wurm)'], ans: 3, exp: 'আল্পস হিমালয়ের ওপর ১৯০৯ সালে বিজ্ঞানী পেঙ্ক ও ব্রাকনার গবেষণা করে চারটি হিমযুগের প্রমাণ পান— গুনৎস, মিন্ডেল, রিস এবং উর্ম। উর্ম হলো এই পর্যায়ক্রমের সর্বশেষ হিমযুগ।'},
+      {q: 'জমাট বাঁধা আলগা তুষার (Snow) থেকে নীলবর্ণের কঠিন বরফে (Glacier Ice) পরিণত হতে সাধারণত কত সময় লাগে?', opts: ['১ বছর', '২ থেকে ৩ বছর', '৫ থেকে ১০ বছর', '১০০ বছর'], ans: 2, exp: 'তুষার জমাট বেঁধে প্রথমে ফার্ন (Firn) বা নেভে-তে পরিণত হয় এবং আরও জমাট বাঁধলে তা নীলবর্ণের কঠিন বরফ বা গ্লেসিয়ার আইস-এ পরিণত হয়। এই প্রক্রিয়ায় ৫ থেকে ১০ বছর সময় লাগে।'},
+      {q: 'মহাদেশীয় হিমবাহের মধ্যে বরফমুক্ত যে উচ্চ ভূভাগ বা পর্বতশৃঙ্গ মাথা উঁচু করে দাঁড়িয়ে থাকে, তাকে কী বলা হয়?', opts: ['নুনাটক (Nunatak)', 'হিমসোপান', 'করি', 'ফিয়র্ড'], ans: 0, exp: 'মহাদেশীয় হিমবাহ বিস্তীর্ণ অঞ্চল জুড়ে অবস্থান করলেও অনেক সময় এর মাঝখানে সুউচ্চ পর্বতশৃঙ্গগুলি বরফমুক্ত অবস্থায় দ্বীপের মতো মাথা উঁচু করে দাঁড়িয়ে থাকে। এদের নুনাটক বলে।'},
+      {q: 'পৃথিবীর বৃহত্তম মহাদেশীয় হিমবাহের নাম কী?', opts: ['সিয়াচেন', 'ল্যামবার্ট (Lambert)', 'হুবার্ড', 'ম্যাসাসপিনা'], ans: 1, exp: 'কুমেরু বা অ্যান্টার্কটিকা মহাদেশে অবস্থিত ল্যামবার্ট হলো পৃথিবীর বৃহত্তম মহাদেশীয় হিমবাহ।'},
+      {q: 'পৃথিবীর সর্বত্র হিমরেখা একই উচ্চতায় থাকে না। নিরক্ষীয় অঞ্চলে হিমরেখার গড় উচ্চতা প্রায় কত হয়?', opts: ['০ মিটার', '৩০০০ মিটার', '৪৫০০ মিটার', '৬০০০ মিটার'], ans: 2, exp: 'অক্ষাংশ বাড়লে হিমরেখার উচ্চতা কমে। নিরক্ষীয় অঞ্চলে উয়তা বেশি থাকায় হিমরেখার উচ্চতা সর্বাধিক (প্রায় ৪৫০০ মিটার) হয়, আবার মেরু অঞ্চলে এটি ০ মিটারে নেমে আসে।'},
+      {q: 'পর্বতগাত্র ও হিমবাহের মধ্যে সৃষ্ট গভীর ফাটলকে কী বলে?', opts: ['সিরাক', 'বার্গস্রুন্ড (Bergschrund)', 'ক্রিভাস', 'এরিটি'], ans: 1, exp: 'পর্বতগাত্র ও চলন্ত হিমবাহের মধ্যে যে গভীর ফাটলের সৃষ্টি হয়, তাকে বার্গস্রুন্ড বলে।'},
+      {q: 'হিমবাহের উপরিপৃষ্ঠে সৃষ্ট আড়াআড়ি ও সমান্তরাল ফাটলগুলিকে কী বলে?', opts: ['সিরাক', 'ক্রিভাস (Crevasse)', 'এরিটি', 'কল'], ans: 1, exp: 'ভূমির ঢাল হঠাৎ বেড়ে গেলে বা অসমান হলে চলন্ত হিমবাহের উপরিভাগে যে অসংখ্য আড়াআড়ি ও লম্বালম্বি ফাটলের সৃষ্টি হয়, তাদের ক্রিভাস বলে।'},
+      {q: 'হিমবাহের ক্ষয়কার্যের ফলে গঠিত হাতলওয়ালা চেয়ারের মতো ভূমিরূপকে কী বলে?', opts: ['সার্ক বা করি (Cirque or Corrie)', 'ড্রামলিন', 'এসকার', 'ফিয়র্ড'], ans: 0, exp: 'উচ্চ পার্বত্য অঞ্চলে হিমবাহের ক্ষয়কার্যের ফলে হাতলওয়ালা চেয়ার বা অ্যাম্ফিথিয়েটারের মতো যে গর্তের সৃষ্টি হয়, তাকে সার্ক বা করি বলে।'},
+      {q: 'সার্ক বা করি-কে জার্মান ভাষায় কী বলা হয়?', opts: ['বটন', 'কুম', 'কার (Kar)', 'হয়ো'], ans: 2, exp: 'পৃথিবীর বিভিন্ন দেশে সার্ক বিভিন্ন নামে পরিচিত। ফরাসিতে একে সার্ক এবং জার্মান ভাষায় কার (Kar) বলা হয়।'},
+      {q: 'স্কটল্যান্ডের ভাষায় সার্ক কী নামে পরিচিত?', opts: ['বটন', 'করি (Corrie)', 'কুম', 'সার্কো'], ans: 1, exp: 'স্কটল্যান্ডের ভাষায় এই হাতলওয়ালা চেয়ারের মতো ভূমিরূপটি করি (Corrie) নামে পরিচিত।'}
+    ]
+  },
+  3: {
+    name: 'Set 3',
+    icon: '🧊',
+    topic: 'হিমবাহসৃষ্ট ভূমিরূপ (Glacial Landforms)',
+    questions: [
+      {q: 'কোনো পর্বতশৃঙ্গকে ঘিরে তিন-চারটি করি (Corrie) পাশাপাশি সৃষ্টি হলে মাঝখানের শৃঙ্গটিকে পিরামিডের মতো দেখায়। হিমালয় পর্বতের কোন শৃঙ্গটি এর প্রকৃষ্ট উদাহরণ?', opts: ['নীলকণ্ঠ', 'মাউণ্ট এভারেস্ট', 'কাঞ্চনজঙ্ঘা', 'মাটারহর্ন'], ans: 0, exp: 'হিমবাহের ক্ষয়কার্যের ফলে সৃষ্ট পিরামিড চূড়ার প্রকৃষ্ট উদাহরণ হলো ভারতের বদ্রীনাথের নিকট অবস্থিত হিমালয় পর্বতের নীলকণ্ঠ শৃঙ্গ।'},
+      {q: 'হিমবাহ উপত্যকার অনুদৈর্ঘ্য ঢাল ধাপ কাটা সিঁড়ির মতো হলে, তাকে হিমসিঁড়ি বলে। এই হিমধাপে জল জমে সৃষ্ট হ্রদগুলিকে কী নামে ডাকা হয়?', opts: ['টার্ন হ্রদ', 'কেটল হ্রদ', 'প্যাটারনস্টার হ্রদ (Paternoster lake)', 'রিমো হ্রদ'], ans: 2, exp: 'হিমবাহের অসম ক্ষয়ের ফলে সৃষ্ট হিমসিঁড়ির ধাপগুলিতে বরফগলা জল জমে যে অসংখ্য ছোটো ছোটো হ্রদের সৃষ্টি হয়, তাদের প্যাটারনস্টার হ্রদ বলে।'},
+      {q: 'সমুদ্রজলে ভাসমান বিশালাকৃতির বরফের স্তূপকে কী বলা হয়, যার ৯ ভাগের মাত্র ১ ভাগ জলের উপরে থাকে?', opts: ['হিমপ্রাচীর', 'হিমশৈল (Iceberg)', 'আইসক্যাপ', 'নুনাটক'], ans: 1, exp: 'মহাদেশীয় হিমবাহ যখন সমুদ্রের উপকূলে এসে পৌঁছায় তখন তার বিশাল বরফের চাঁই ভেঙে সমুদ্রে ভাসতে থাকে। সমুদ্রজলে ভাসমান এই বরফের স্তূপকে হিমশৈল বলে।'},
+      {q: 'হিমবাহের প্রবাহের দিকটি অবঘর্ষের ফলে মসৃণ এবং বিপরীত দিকটি উৎপাটন প্রক্রিয়ায় অমসৃণ ও ভগ্ন হলে সেই শিলাখণ্ডকে কী বলে?', opts: ['ড্রামলিন', 'রসে মতানে (Roche Moutonnee)', 'ক্র্যাগ ও টেল', 'এসকার'], ans: 1, exp: 'হিমবাহের প্রবাহপথে কোনো কঠিন শিলা উঁচু ঢিবির মতো অবস্থান করলে প্রবাহের দিকটি অবঘর্ষ প্রক্রিয়ায় মসৃণ হয় এবং বিপরীত দিকটি উৎপাটন প্রক্রিয়ায় এবড়োখেবড়ো হয়। এই ভূমিরূপ রসে মতানে নামে পরিচিত।'},
+      {q: 'উলটানো চামচ বা \'ডিমভরতি ঝুড়ি\'-র মতো দেখতে হিমবাহের সঞ্চয়জাত ভূমিরূপটিকে কী বলা হয়?', opts: ['টিল', 'ড্রামলিন (Drumlin)', 'কেম', 'নব'], ans: 1, exp: 'হিমবাহের সঞ্চয়কার্যের ফলে তলদেশে বালি, কাদা ও নুড়ি সঞ্চিত হয়ে যে মসৃণ ও ডিম্বাকৃতি ঢিবির সৃষ্টি হয় তাকে ড্রামলিন বলে। অনেকগুলি ড্রামলিন একসাথে থাকলে তাকে \'ডিমভরতি ঝুড়ি\' বা Basket of egg topography বলে।'},
+      {q: 'হিমবাহ গলিত জলধারা দ্বারা সৃষ্ট চন্দ্রকলার মতো খাতকে কী বলে?', opts: ['সিচেলওয়ালেন (Sichelwannen)', 'ভ্যালি ট্রেন', 'কেম মঞ্চ', 'ফিয়র্ড'], ans: 0, exp: 'হিমবাহ গলিত জলধারা অনেক সময় উপত্যকার তলদেশে চন্দ্রকলার মতো বাঁকানো খাত তৈরি করে, যা সিচেলওয়ালেন নামে পরিচিত।'},
+      {q: 'বিস্তীর্ণ বহিঃধৌত সমভূমিতে ছোটো-বড়ো বরফখণ্ড সঞ্চিত হয়ে পরে গলে গেলে যে নীচু গর্তের সৃষ্টি হয়, তাকে কী বলে?', opts: ['নব', 'কেটল (Kettle)', 'ড্রামলিন', 'এসকার'], ans: 1, exp: 'বহিঃধৌত সমভূমিতে বরফখণ্ড সঞ্চিত হয়ে পরে গলে গেলে যে নীচু গর্তের সৃষ্টি হয়, তাকে কেটল বলে। স্কটল্যান্ডের আর্বান দ্বীপে এর প্রকৃষ্ট নিদর্শন মেলে।'},
+      {q: 'হিমবাহ ও জলধারার মিলিত সঞ্চয়কার্যের ফলে বালি, নুড়ি, কাঁকর সঞ্চিত হয়ে যে অতি দীর্ঘ ও আঁকাবাঁকা শৈলশিরার মতো ভূমিরূপ তৈরি হয়, তার নাম কী?', opts: ['এসকার (Esker)', 'গ্রাবরেখা', 'ভ্যালি ট্রেন', 'ড্রামলিন'], ans: 0, exp: 'বরফগলা জলের স্রোতে পরিবাহিত নুড়ি, বালি ও কাঁকর অনেক সময় দীর্ঘ ও আঁকাবাঁকা শৈলশিরার মতো সঞ্চিত হয়, যা এসকার নামে পরিচিত।'},
+      {q: 'ফিনল্যান্ডের দক্ষিণ অংশে বহিঃধৌত সমভূমিতে হিমবাহের সঞ্চয়জাত উঁচুনীচু ঢিবিগুলি কী নামে পরিচিত?', opts: ['কেটল', 'নব (Knob)', 'টিল', 'আগামুক'], ans: 1, exp: 'বহিঃধৌত সমভূমিতে হিমবাহের অসম অবক্ষেপণের ফলে বিভিন্ন আকৃতির শিলাখণ্ড সঞ্চিত হয়ে যে উঁচুনীচু ভূমিরূপ সৃষ্টি করে, তার উঁচু ঢিবিগুলিকে ফিনল্যান্ডে নব বলা হয়।'},
+      {q: 'মহাদেশীয় হিমবাহবাহিত পলি কোনো হ্রদের তলদেশে পর্যায়ক্রমে প্রতি বছর ভারী ও হালকা স্তরে সঞ্চিত হলে, ওই জোড়া স্তরকে একত্রে কী বলে?', opts: ['টিলাইট', 'ভার্ভ (Varve)', 'স্যান্ডার', 'আগামুক'], ans: 1, exp: 'হ্রদের জলে হিমবাহবাহিত ভারী পলি সাথে সাথে থিতিয়ে পড়ে, কিন্তু হালকা পলি ভাসমান থেকে পরে সঞ্চিত হয়। এই ভারী ও হালকা পলির পর্যায়ক্রমিক জোড়া স্তরকে একসঙ্গে ভার্ভ বলা হয়।'},
+      {q: 'হিমবাহ উপত্যকার আকৃতি দেখতে সাধারণত কেমন হয়?', opts: ['V আকৃতির', 'U আকৃতির', 'I আকৃতির', 'Y আকৃতির'], ans: 1, exp: 'পার্বত্য অঞ্চলে নদী উপত্যকার মধ্য দিয়ে হিমবাহ প্রবাহিত হলে অবঘর্ষ প্রক্রিয়ায় উপত্যকার তলদেশ ও দুই পাশ ক্ষয় পেয়ে চওড়া ও সমতল হয়, ফলে এটি ইংরেজি \'U\' অক্ষরের মতো আকার ধারণ করে।'},
+      {q: 'সমুদ্রতলে অবস্থিত হিমবাহ-কর্তিত নিমজ্জিত উপত্যকাকে কী বলে?', opts: ['হিমদ্রোণি', 'ঝুলন্ত উপত্যকা', 'ফিয়র্ড (Fjord)', 'কেটল'], ans: 2, exp: 'সমুদ্র উপকূলবর্তী অঞ্চলে হিমবাহের ক্ষয়কার্যের ফলে সৃষ্ট \'U\' আকৃতির উপত্যকা সমুদ্রের জলে আংশিক নিমজ্জিত হলে তাকে ফিয়র্ড বলে।'},
+      {q: 'পৃথিবীর গভীরতম ফিয়র্ডের নাম কী?', opts: ['সোজনে (Sogne)', 'গাইরেঞ্জার', 'মেজার্ড', 'মিলফোর্ড সাউন্ড'], ans: 0, exp: 'নরওয়ের সোজনে (Sogne) হলো পৃথিবীর গভীরতম ফিয়র্ড।'},
+      {q: 'হিমবাহের দু-পাশে সঞ্চিত গ্রাবরেখাকে কী বলা হয়?', opts: ['প্রান্ত গ্রাবরেখা', 'পার্শ্ব গ্রাবরেখা', 'মধ্য গ্রাবরেখা', 'ভূমি গ্রাবরেখা'], ans: 1, exp: 'হিমবাহের প্রবাহপথে তার দু-পাশে যে শিলাখণ্ড ও পদার্থসমূহ সঞ্চিত হয়, তাকে পার্শ্ব গ্রাবরেখা বলে।'},
+      {q: 'দুটি করির মধ্যবর্তী সংকীর্ণ ও তীক্ষ্ণ প্রাচীরকে কী বলা হয়?', opts: ['পিরামিড চূড়া', 'এরিটি বা অ্যারেট (Arete)', 'হিমসিঁড়ি', 'কল'], ans: 1, exp: 'দুটি করির মধ্যবর্তী অংশে অত্যন্ত বন্ধুর ও খাড়া ঢালের মতো করাতের দাঁতের ন্যায় যে তীক্ষ্ণ শৈলশিরা সৃষ্টি হয়, তাকে এরিটি বা অ্যারেট বলে।'}
+    ]
+  },
+  4: {
+    name: 'Set 4',
+    icon: '💧',
+    topic: 'হিমবাহ ও ভৌমজল (Glaciers & Karst Landforms)',
+    questions: [
+      {q: 'রসে মতানে উৎপত্তিতে প্রধানত কোন দুটি প্রক্রিয়া দায়ী?', opts: ['অবঘর্ষ ও সঞ্চয়', 'উৎপাটন ও অবক্ষেপ', 'অবঘর্ষ ও উৎপাটন', 'উৎপাটন ও বহন'], ans: 2, exp: 'হিমবাহের প্রবাহপথে থাকা কঠিন শিলার সম্মুখভাগ অবঘর্ষ প্রক্রিয়ায় মসৃণ এবং বিপরীত দিকটি উৎপাটন প্রক্রিয়ায় অমসৃণ হয়ে রসে মতানে তৈরি করে।'},
+      {q: 'হিমবাহ অধ্যুষিত নিম্নভূমিতে সঞ্চয়ের ফলে সৃষ্ট বালি বা কর্দমের উপর বিভিন্ন প্রস্তরখণ্ডের সঞ্চয়কে কী বলা হয়?', opts: ['আগামুক', 'বোল্ডার ক্লে বা টিল (Boulder Clay or Till)', 'গ্রাবরেখা', 'ড্রামলিন'], ans: 1, exp: 'হিমবাহ গলে গেলে হিমবাহ বাহিত বালি বা কর্দমের উপর বিভিন্ন আকৃতির শিলাখণ্ড একত্রে সঞ্চিত হয়, একে বোল্ডার ক্লে বা টিল বলে।'},
+      {q: 'গতিহীন বরফের প্রান্তভাগ থেকে উৎপন্ন জলধারার দ্বারা সৃষ্ট পিণ্ডাকৃতির ঢিবিকে কী বলে?', opts: ['কেম (Kame)', 'এসকার', 'নব', 'কেটল'], ans: 0, exp: 'উপত্যকার নিম্ন অংশে হিমবাহ গলতে শুরু করলে জলধারার দ্বারা উপত্যকার পার্শ্বদেশ থেকে স্খলিত পদার্থসমূহ সঞ্চিত হয়ে যে ঢিবির ন্যায় ভূমিরূপ সৃষ্টি করে, তাকেই কেম বলে।'},
+      {q: 'স্কটল্যান্ডের আর্বান দ্বীপ কোন প্রকার হিমবাহ সঞ্চয়জাত ভূমিরূপের আদর্শ উদাহরণ?', opts: ['নব', 'ড্রামলিন', 'এসকার', 'কেটল (Kettle)'], ans: 3, exp: 'বহিঃধৌত সমভূমিতে গর্তের ন্যায় নীচু স্থানগুলিকে কেটল বলে। স্কটল্যান্ডের আর্বান দ্বীপে অসংখ্য কেটল ও কেটল হ্রদের প্রকৃষ্ট নিদর্শন মেলে।'},
+      {q: 'আলপস অঞ্চলে বহিঃধৌত সমভূমির সঞ্চয় কী নামে পরিচিত?', opts: ['স্যান্ডার', 'ডেকেন শটার (Decken Schotter)', 'ভ্যালি ট্রেন', 'বিডেড এসকার'], ans: 1, exp: 'আল্পস পার্বত্য অঞ্চলে হিমবাহ গলিত জলধারার দ্বারা সৃষ্ট বহিঃধৌত সমভূমির সঞ্চয়কে ডেকেন শটার বলা হয়।'},
+      {q: 'আইসল্যান্ডে হিমবাহের বিনুনিরূপ সঞ্চয়ে যে ব্যবচ্ছিন্ন সমভূমি তৈরি হয়, তার নাম কী?', opts: ['স্যান্ডার (Sandur)', 'ডেকেন শটার', 'এসকার', 'গ্রাবরেখা'], ans: 0, exp: 'বহিঃধৌত সমভূমির ওপর নদী ব্যবস্থা বিস্তার লাভ করলে সেটি বিচ্ছিন্ন হয়ে যায় যাকে ভ্যালি ট্রেন বলে। আইসল্যান্ডে এই বিনুনিরূপী ব্যবচ্ছিন্ন সমভূমি স্যান্ডার নামে পরিচিত।'},
+      {q: '\'কার্স্ট\' (Karst) কথাটি কোন দেশের ভাষা থেকে এসেছে, যার অর্থ \'উন্মুক্ত প্রস্তরময় ভূমি\'?', opts: ['ফরাসি', 'জার্মান', 'ল্যাটিন', 'গ্রিক'], ans: 1, exp: 'কার্স্ট (Karst) একটি জার্মান শব্দ, যা ইন্দো-ইউরোপীয় শব্দ \'Kar\' থেকে এসেছে এবং স্লোভেনিয়ায় এটি \'Kras\' নামে পরিচিত, যার অর্থ উন্মুক্ত প্রস্তরময় ভূমি।'},
+      {q: 'শিলা বা মাটির মোট আয়তনের সাপেক্ষে তার মধ্যে থাকা রন্ধ্র বা শূন্যস্থানের মোট আয়তনের শতকরা অনুপাতকে কী বলে?', opts: ['প্রবেশ্যতা', 'সচ্ছিদ্রতা (Porosity)', 'সম্পৃক্ততা', 'দ্রবণ ক্ষমতা'], ans: 1, exp: 'কোনো শিলার ভেতরে থাকা ফাঁকা স্থানের পরিমাণকে সচ্ছিদ্রতা বলে। সচ্ছিদ্রতার শতকরা হার বেশি হলে ভৌমজলের সঞ্চয় হওয়ার হারও বেশি হয়।'},
+      {q: 'আর্দ্র ক্রান্তীয় অঞ্চলে বিশুদ্ধ চুনাপাথর দ্রবীভূত হয়ে অপসারিত হওয়ার পর অদ্রবণীয় লৌহযৌগ সমৃদ্ধ যে কাদাময় লাল মাটির আবরণ তৈরি হয় তাকে কী বলে?', opts: ['রেগোলিথ', 'টেরা রোসা (Terra rossa)', 'বগ মাটি', 'চারনোজেম'], ans: 1, exp: 'Terra শব্দের অর্থ \'মৃত্তিকা\' ও Rossa শব্দের অর্থ \'লাল\'। ল্যাটেরাইট মাটির মতো চুনাপাথর অঞ্চলে সৃষ্ট এই লৌহসমৃদ্ধ লাল মাটিকে টেরা রোসা বলা হয়।'},
+      {q: 'অধিক ঢালযুক্ত চুনাপাথর অঞ্চলে দ্রবণ কার্যের ফলে শিলাপৃষ্ঠে সৃষ্ট অসংখ্য অগভীর ও রৈখিক খাতগুলিকে ফরাসি ভাষায় কী বলে?', opts: ['ল্যাপিস (Lapies)', 'কারেন (Karren)', 'বোগাজ', 'পোনর'], ans: 0, exp: 'চুনাপাথরের উপরিপৃষ্ঠে বৃষ্টির জলের দ্রবণ ক্ষয়ে সৃষ্ট রৈখিক খাতগুলিকে ফরাসি ভাষায় ল্যাপিস এবং জার্মান ভাষায় কারেন বলা হয়।'},
+      {q: 'চুনাপাথরযুক্ত অঞ্চলে দ্রবণ কার্যের ফলে সৃষ্ট ফানেল আকৃতির অবনত স্থান বা গর্তকে কী বলা হয়?', opts: ['সোয়ালোহোল', 'সিঙ্কহোল (Sinkhole) বা ডোলাইন', 'উভালা', 'গ্রাইক'], ans: 1, exp: 'দ্রবণকার্যের ফলে কার্স্ট অঞ্চলে যে ফানেল আকৃতির গর্ত তৈরি হয় তাকে সিঙ্কহোল বলে। সার্বিয়ান ভাষায় একে \'ডোলাইন\' বলা হয়।'},
+      {q: 'একাধিক সিঙ্কহোল বা ডোলাইন পরস্পর মিলিত হয়ে অপেক্ষাকৃত বড়ো আকৃতির যে গর্তের সৃষ্টি করে, তাকে কী বলে?', opts: ['সোয়ালো হোল', 'উভালা (Uvala)', 'পোলজি', 'দ্রবণ প্যান'], ans: 1, exp: 'একাধিক সিঙ্কহোল বা ডোলাইন যখন ক্ষয়ের ফলে পরস্পর মিলে গিয়ে একটি দীর্ঘায়িত বা উপবৃত্তাকার বড়ো গর্তের সৃষ্টি করে, তখন তাকে উভালা বলে।'},
+      {q: 'চুনাপাথরের গুহার ছাদ যে অংশে ধসে যায়, সেখান দিয়ে ভূপৃষ্ঠ থেকে ভূগর্ভস্থ নদীকে দেখা গেলে, তাকে কী বলে?', opts: ['কার্স্ট বাতায়ন (Karst Window)', 'প্রাকৃতিক সেতু', 'অন্ধ উপত্যকা', 'পোনর'], ans: 0, exp: 'জানালার মতো সুড়ঙ্গের ছাদ ধসে গিয়ে ভূগর্ভস্থ নদী উন্মুক্ত হলে তাকে কার্স্ট বাতায়ন বা কার্স্ট গবাক্ষ বলে।'},
+      {q: 'কার্স্ট অঞ্চলে পোলজির ভিতরে চুনাপাথরের অবশিষ্ট টিলাগুলিকে কী বলা হয়?', opts: ['মোনাডনক', 'ইনসেলবার্গ', 'হাম্স (Hums)', 'গায়ট'], ans: 2, exp: 'দ্রবণ প্রক্রিয়ায় পোলজির মাঝখানে অবশিষ্টাংশ হিসেবে দাঁড়িয়ে থাকা অদ্রাব্য শিলার টিলাগুলিকে হাম্স বা হে স্ট্যাক পাহাড় বা পেপিনো পাহাড় বলা হয়।'},
+      {q: 'ভারতের ছত্তিশগড় রাজ্যের রায়পুর জেলায় শেল দ্বারা গঠিত হাম্সগুলি স্থানীয় ভাষায় কী নামে পরিচিত?', opts: ['মোগোতেস', 'রাবণভাটা', 'কন্দর', 'বোগাজ'], ans: 1, exp: 'রায়পুর জেলার মধ্যভাগে শেল-গঠিত হাম্সগুলিকে স্থানীয় ভাষায় রাবণভাটা বলা হয়।'}
+    ]
+  },
+  5: {
+    name: 'Set 5',
+    icon: '🕳️',
+    topic: 'কার্স্ট ভূমিরূপ (Karst Landforms) — পর্ব ১',
+    questions: [
+      {q: 'কার্স্ট অঞ্চলে নদীর জল সিঙ্কহোলে প্রবেশ করার পর নদী উপত্যকার নিম্নাংশটি জলশূন্য হয়ে পড়লে, সেই শুষ্ক খাতটিকে কী বলে?', opts: ['অন্ধ উপত্যকা', 'শুষ্ক উপত্যকা (Dry Valley)', 'গিরিখাত', 'প্রাকৃতিক সুড়ঙ্গ'], ans: 1, exp: 'নদীর সম্পূর্ণ জল সিঙ্কহোল দিয়ে ভূগর্ভে চলে গেলে উপত্যকার তার পরের অংশটি জলহীন অবস্থায় পড়ে থাকে, একে শুষ্ক উপত্যকা বলে।'},
+      {q: 'ফ্রান্সের \'গুফ্রে বারজার\' (Gouffre Berger) কীসের জন্য পৃথিবীতে বিখ্যাত?', opts: ['এটি পৃথিবীর বৃহত্তম উভালা', 'এটি পৃথিবীর গভীরতম কার্স্ট গুহা', 'এটি একটি বিখ্যাত প্রাকৃতিক সেতু', 'এটি একটি উষ্ণ প্রস্রবণ'], ans: 1, exp: 'ফ্রান্সের গুফ্রে বারজার প্রায় ১,১৩০ মিটার গভীরতায় অবস্থিত এবং এটি পৃথিবীর গভীরতম চুনাপাথরের গুহা বা ভূগহ্বর (cavern) হিসেবে পরিচিত।'},
+      {q: 'চুনাপাথরের গুহার ছাদ থেকে দ্রবীভূত চুন ফোঁটা ফোঁটা পড়ে মেঝেতে পৌঁছানোর আগেই বাষ্পীভূত হয়ে দণ্ডের আকারে ঝুলতে থাকলে তাকে কী বলে?', opts: ['হেলিকটাইট', 'স্ট্যালাগমাইট', 'স্ট্যালাকটাইট (Stalactite)', 'রুফ পেনডেন্ট'], ans: 2, exp: 'ক্যালশিয়াম কার্বনেটের গাঢ় জলীয় দ্রবণ গুহার ছাদ থেকে ঝুলে ক্রমশ জমাট বেঁধে দণ্ডের আকার ধারণ করলে, তাকে স্ট্যালাকটাইট বলে।'},
+      {q: 'চুনাপাথরের গুহার মেঝেতে চুন জমে জমে ক্রমশ ওপরের দিকে স্তম্ভের মতো বাড়তে থাকলে তাকে কী বলা হয়?', opts: ['স্ট্যালাগমাইট (Stalagmite)', 'স্ট্যালাকটাইট', 'গুহা স্তম্ভ', 'অ্যানথোডাইট'], ans: 0, exp: 'গুহার ছাদ থেকে ফোঁটা ফোঁটা চুন জল মেঝেতে পড়ে জমাট বেঁধে নীচ থেকে উপরের দিকে বৃদ্ধি পেলে তাকে স্ট্যালাগমাইট বলে।'},
+      {q: 'চুনাপাথরের গুহার মধ্যে দ্রবীভূত চুনের সঞ্চয় যখন মাধ্যাকর্ষণের তোয়াক্কা না করে তির্যকভাবে বা বক্রভাবে বৃদ্ধি পায়, তখন তাকে কী বলে?', opts: ['কিনারা প্রস্তর', 'অ্যানথোডাইট', 'হেলিকটাইট (Helictite)', 'ড্রিপস্টোন'], ans: 2, exp: 'গুহার মধ্যে অনেক সময় অস্বাভাবিক আকৃতির মূর্তি গড়ে ওঠে যা ওপর দিকে, নীচের দিকে বা পার্শ্ব-বরাবর তির্যকভাবে বা বক্রভাবে বৃদ্ধি পায়, একে হেলিকটাইট বলে।'},
+      {q: 'কার্স্ট অঞ্চলে গুহার ছাদ থেকে ফোঁটা ফোঁটা চুন জমে অনেক সময় ফুলের পাপড়ির মতো যে ভূমিরূপ গঠিত হয়, তাকে কী বলা হয়?', opts: ['রুফ পেনডেন্ট', 'ড্র্যাপ', 'অ্যানথোডাইট (Anthodite)', 'স্ট্যালাকটাইট'], ans: 2, exp: 'চুনাপাথরের গুহার ছাদে জলের সাথে দ্রবীভূত চুন ফুলের পাপড়ির মতো সূক্ষ্ম ও বিচিত্র আকারের সঞ্চয় সৃষ্টি করলে তাকে অ্যানথোডাইট বলে।'},
+      {q: 'শীতল জলবায়ু অঞ্চলে চুনাপাথরের ওপর তুষারগলা জলের দ্বারা যে কার্স্ট ভূমিরূপ গঠিত হয়, তাকে কী বলে?', opts: ['ফ্লুভিওকার্স্ট', 'নিভালকার্স্ট (Nevalkarst)', 'সিউডোকার্স্ট', 'মেরোকার্স্ট'], ans: 1, exp: 'নিভাল (Neval) কথাটির অর্থ তুষারসম্পর্কিত। শীতল অঞ্চলে তুষারগলা জলের দ্রবণ কার্যের ফলে যে কার্স্ট ভূমিরূপ তৈরি হয়, তাকে নিভালকার্স্ট বলে।'},
+      {q: 'ভারতের কোন দ্বীপ অঞ্চলে চুনাপাথরের গুহা বা উল্লেখযোগ্য কার্স্ট ভূমিরূপ দেখা যায়?', opts: ['লাক্ষাদ্বীপ', 'মাজুলি', 'বারাতং, আন্দামান (Baratang, Andaman)', 'সাগর দ্বীপ'], ans: 2, exp: 'ভারতের আন্দামান দ্বীপপুঞ্জের বারাতং দ্বীপে চুনাপাথরের গুহা, স্ট্যালাকটাইট, স্ট্যালাগমাইট এবং প্রাকৃতিক সেতু-সহ নানা কার্স্ট ভূমিরূপের নিদর্শন পাওয়া যায়।'},
+      {q: 'অনাবৃত চুনাপাথরের দারণ বা সন্ধিস্থল বরাবর দ্রবণ ক্ষয়ের ফলে সৃষ্ট রৈখিক, গভীর ও দীর্ঘ গর্তগুলিকে কী বলা হয়?', opts: ['ক্লিন্ট', 'বোগাজ', 'গ্রাইক (Grike)', 'কারেন'], ans: 2, exp: 'দ্রবণ কার্যের ফলে চুনাপাথরের সন্ধিতল বরাবর রৈখিক ও গভীর যে খাত বা গর্তের সৃষ্টি হয় তাদের গ্রাইক বলে।'},
+      {q: 'কার্স্ট অঞ্চলে সিঙ্কহোল বা ডোলাইনগুলি বৃষ্টির জলে পুষ্ট হয়ে অথবা কাদামাটি দ্বারা ছিদ্র বুজে গিয়ে পুকুরের মতো জলপূর্ণ হলে তাকে কী বলা হয়?', opts: ['উভালা', 'কার্স্ট বাতায়ন', 'পোনর', 'কার্স্ট হ্রদ (Karst Lake)'], ans: 3, exp: 'চারদিক থেকে ধুয়ে আসা কাদা ডোলাইনের তলদেশের ছিদ্রগুলোকে বন্ধ করে দিলে সেখানে জল জমে হ্রদের সৃষ্টি হয়, একে কার্স্ট হ্রদ বলে।'},
+      {q: '\'ডোলাইন\' (Doline) কথাটির সার্বিয়ান অর্থ কী?', opts: ['খাড়া ঢালযুক্ত পাহাড়', 'ভূদৃশ্যের মধ্যে এক অবনমন (a depression in the landscape)', 'ভূগর্ভস্থ নদী', 'মৃত্তিকার লাল আবরণ'], ans: 1, exp: 'সার্বিয়ান শব্দ \'Dolina\' থেকে \'ডোলাইন\' শব্দটি এসেছে, যার অর্থ \'ভূদৃশ্যের মধ্যে এক অবনমন\'। এটি আসলে সিঙ্কহোলেরই নামান্তর।'},
+      {q: 'বড়ো আকারের গ্রাইককে (চার মিটার প্রশস্ত, পাঁচ মিটার গভীর) কী বলা হয়?', opts: ['ল্যাপিস', 'বোগাজ (Bogaz)', 'ডোলাইন', 'পোনর'], ans: 1, exp: 'বড়ো আকারের গ্রাইককে (চার মিটার প্রশস্ত, পাঁচ মিটার গভীর ও দশ মিটারের বেশি দীর্ঘ) বোগাজ (Bogaz) বলে।'},
+      {q: 'পোলজি (Polje) কী?', opts: ['ভূগর্ভস্থ নদী', 'চুনাপাথরের নিম্নভূমিতে উভালা অপেক্ষা বৃহদাকৃতির উপবৃত্তাকার অবনত ভূভাগ', 'প্রাকৃতিক সেতু', 'চুনাপাথরের গুহার ছাদ'], ans: 1, exp: 'চুনাপাথরের নিম্নভূমিতে উৎপন্ন উভালা অপেক্ষা বৃহদাকৃতির উপবৃত্তাকার অবনত ভূভাগকে পোলজি বলে। এর ভূভাগ সমতল তলদেশবিশিষ্ট হয় এবং খাড়া ঢাল দ্বারা আবদ্ধ থাকে।'},
+      {q: 'চুনাপাথরের গুহার ছাদ থেকে কীলক বা ছুরির ফলার মতো আকৃতির অভিক্ষিপ্ত পাথরের টুকরোকে কী বলে?', opts: ['অ্যানথোডাইট', 'হেলিকটাইট', 'রুফ পেনডেন্ট (Roof Pendant)', 'স্ট্যালাগমাইট'], ans: 2, exp: 'চুনাপাথরের গুহার ছাদ থেকে কীলক বা ছুরির ফলার মতো আকৃতির অভিক্ষিপ্ত পাথরের টুকরোকে রুফ পেনডেন্ট বলে।'},
+      {q: 'স্ট্যালাকটাইট ও স্ট্যালাগমাইট ক্রমশ বৃদ্ধি পেয়ে পরস্পর যুক্ত হয়ে গেলে তাকে কী বলে?', opts: ['কিনারা প্রস্তর', 'গুহা স্তম্ভ (Cave Pillar)', 'ড্রেপ', 'ল্যাপিস'], ans: 1, exp: 'গুহার ছাদ থেকে নামতে থাকা স্ট্যালাকটাইট ও নীচের থেকে ওপরের দিকে বাড়তে থাকা স্ট্যালাগমাইট একসাথে যুক্ত হয়ে একটি দণ্ডে পরিণত হলে, তাকে গুহা স্তম্ভ বলে।'}
+    ]
+  },
+  6: {
+    name: 'Set 6',
+    icon: '🌋',
+    topic: 'কার্স্ট ভূমিরূপ (Karst Landforms) — পর্ব ২',
+    questions: [
+      {q: 'পৃথিবীর দীর্ঘতম কার্স্ট গুহা কোনটি?', opts: ['ম্যামথ (Mammoth)', 'কুবেরা', 'লেচুগিয়া', 'ডমিকা'], ans: 0, exp: 'মার্কিন যুক্তরাষ্ট্রের কেন্টাকিতে অবস্থিত ম্যামথ গুহা (Mammoth Cave) হলো পৃথিবীর দীর্ঘতম কার্স্ট গুহা বা চুনাপাথরের গুহা।'},
+      {q: 'টেরা রোসা-জাতীয় ভূমিরূপ মূলত কোন্ শিলার ওপর গড়ে ওঠে?', opts: ['গ্র্যানাইট-জাতীয় শিলার ওপর', 'ব্যাসল্ট-জাতীয় শিলার ওপর', 'বেলেপাথর-জাতীয় শিলার ওপর', 'চুনাপাথর-জাতীয় শিলার ওপর'], ans: 3, exp: 'বিশুদ্ধ চুনাপাথর জল দ্বারা দ্রবীভূত হয়ে অপসারিত হলে ভূপৃষ্ঠে অদ্রবণীয় লৌহযৌগ সঞ্চিত হয়ে কাদাময় যে লাল মাটি বা আবরণের সৃষ্টি করে, তাকেই টেরা রোসা বলে।'},
+      {q: 'ভারতের একটি উল্লেখযোগ্য কার্স্ট অঞ্চল কোনটি?', opts: ['কাশ্মীর উপত্যকা', 'বোরা গুহা (Bora Caves)', 'রূপার্বত্য অঞ্চল', 'অজন্তা গুহা'], ans: 1, exp: 'ভারতের অন্ধ্রপ্রদেশের বিশাখাপত্তনমের কাছে অবস্থিত বোরা গুহা (Bora Caves) একটি অত্যন্ত বিখ্যাত ও উল্লেখযোগ্য কার্স্ট অঞ্চল, যেখানে স্ট্যালাকটাইট, স্ট্যালাগমাইট, কার্স্ট বাতায়ন ইত্যাদি দেখা যায়।'},
+      {q: 'বহুতলবিশিষ্ট বা একাধিক স্তরযুক্ত কার্স্ট গুহা কী নামে পরিচিত?', opts: ['সরল গুহা', 'প্রকোষ্ঠ গুহা', 'গ্যালারি গুহা (Galleried Cavern)', 'মঞ্চ গুহা'], ans: 2, exp: 'কার্স্ট গুহা অনেক সময় উল্লম্বভাবে বহুতলবিশিষ্ট হয়। এই প্রকার একাধিক তলের গুহাকে গ্যালারি গুহা বলে। ভারতের বোরাগুহা এর অন্যতম উদাহরণ।'},
+      {q: 'কার্স্ট অঞ্চলে ক্ষয়প্রাপ্ত চুনাপাথরের অবশিষ্ট উঁচু টিলাগুলিকে কী বলে?', opts: ['ডোলাইন', 'হাম্স (Hums)', 'স্ট্যালাকটাইট', 'স্ট্যালাগমাইট'], ans: 1, exp: 'কার্স্ট অঞ্চলের পোলজির ভিতরে অদ্রাব্য শিলার অবশিষ্টাংশ যখন ছোটো ছোটো টিলার আকারে অবস্থান করে, তখন সেই পাহাড়গুলিকে হাম্স বা হে স্ট্যাক পাহাড় (Hay Stack Hills) বলে।'},
+      {q: 'চুনাপাথরের ফাটল বা জোড়ামুখ বরাবর সৃষ্ট রৈখিক, গভীর ও দীর্ঘ দ্রবণ গর্তকে কী বলে?', opts: ['ল্যাপিস', 'গ্রাইক (Grike)', 'পোনর', 'হাম্স'], ans: 1, exp: 'দ্রবণ কার্যের ফলে অনাবৃত চুনাপাথরে দারণ বা সন্ধিস্থল বরাবর যে রৈখিক, গভীর ও দীর্ঘ দ্রবণগর্ত সৃষ্টি হয় তাদের গ্রাইক বলে। এই গ্রাইকগুলি জালিকাকারে পরস্পরের সমকোণে বিস্তৃত হয়।'},
+      {q: 'অন্ধ-উপত্যকার (Blind Valley) একটি প্রধান বৈশিষ্ট্য কী?', opts: ['এটি ঊর্ধ্ব নদী উপত্যকা নির্দেশ করে ও সারাবছর জল থাকে', 'এটি নিম্ন নদী উপত্যকা নির্দেশ করে ও সারাবছর জল থাকে', 'বর্ষাকাল ছাড়া এই উপত্যকা সারাবছর শুষ্ক থাকে', 'চুনাপাথরের সুড়ঙ্গে প্রবেশ করার পর উপত্যকা ভূপৃষ্ঠে আর দেখা যায় না'], ans: 3, exp: 'কার্স্ট অঞ্চলে প্রবাহিত নদী যখন কোনো সিঙ্কহোলে প্রবেশ করে ভূগর্ভে চলে যায়, তখন উপত্যকার বিস্তার ওই সিঙ্কহোল পর্যন্তই দৃশ্যমান থাকে এবং হঠাৎ শেষ হয়ে যায়। কানাগলির মতো এই উপত্যকাই অন্ধ উপত্যকা।'},
+      {q: 'ভৌমজলের পূরণ (Recharge) কোন্ ঋতুতে সবচেয়ে বেশি হয়?', opts: ['শীত', 'গ্রীষ্ম', 'বর্ষা', 'বসন্ত'], ans: 2, exp: 'ভৌমজলের প্রধান উৎস হলো বৃষ্টি এবং তুষারগলা জল। বর্ষাকালে প্রচুর বৃষ্টিপাতের কারণে ভূপৃষ্ঠের জল চুঁইয়ে মাটির নীচে প্রবেশ করে ভৌমজলের স্তরকে সবচেয়ে বেশি পরিপূরণ করে।'},
+      {q: 'চুনাপাথরযুক্ত অঞ্চলে দ্রবণ কাজের ফলে সৃষ্ট খাতগুলিকে জার্মান ভাষায় কী বলে?', opts: ['বোগাজ', 'ল্যাপিস', 'গ্রাইক', 'কারেন (Karren)'], ans: 3, exp: 'অধিক ঢালবিশিষ্ট চুনাপাথর অঞ্চলে দ্রবণ কার্যের ফলে শিলাপৃষ্ঠে সৃষ্ট অসংখ্য অগভীর ও রৈখিক খাতগুলিকে ফরাসি ভাষায় ল্যাপিস এবং জার্মান ভাষায় কারেন বলা হয়।'},
+      {q: 'একাধিক সিঙ্কহোল পরস্পরের সাথে মিলিত হয়ে তুলনামূলক বড়ো যে গর্ত গঠন করে, তাকে কী বলে?', opts: ['উভালা (Uvala)', 'পোলজি', 'হাম্স', 'কার্স্ট বাতায়ন'], ans: 0, exp: 'কার্স্ট অঞ্চলে একাধিক সিঙ্কহোল বা ডোলাইন যখন ক্ষয়ের ফলে পরস্পর মিলে গিয়ে একটি দীর্ঘায়িত বা উপবৃত্তাকার বড়ো গর্তের সৃষ্টি করে, তখন তাকে উভালা বলে।'},
+      {q: 'কার্স্ট অঞ্চলে সিঙ্কহোলে নদী উপত্যকার জল প্রবেশ করার পর, উপত্যকার জলহীন পরবর্তী অংশটিকে কী বলে?', opts: ['অন্ধ উপত্যকা', 'বায়ুপূর্ণ উপত্যকা', 'শুষ্ক উপত্যকা (Dry Valley)', 'পলিপূর্ণ উপত্যকা'], ans: 2, exp: 'নদীর সম্পূর্ণ জল সিঙ্কহোল দিয়ে ভূগর্ভে চলে যাওয়ার ফলে, সিঙ্কহোলের পরবর্তী নদী উপত্যকার নিম্নাংশটি জলশূন্য হয়ে পড়ে। জলশূন্য ওই খাতকে শুষ্ক উপত্যকা বা Dry Valley বলে।'},
+      {q: 'চুনাপাথর ব্যতীত কোন্ শিলা অধ্যুষিত অঞ্চলে অনুকূল অবস্থায় কার্স্ট ভূমিরূপ গঠিত হতে পারে?', opts: ['বেলেপাথর', 'কাদাপাথর', 'জিপসাম', 'ডলোমাইট ও জিপসাম'], ans: 3, exp: 'বিশুদ্ধ চুনাপাথর (ক্যালসিয়াম কার্বনেট) ছাড়াও ডলোমাইট (ক্যালসিয়াম ম্যাগনেসিয়াম কার্বনেট) এবং জিপসাম খনিজগুলি জলের দ্বারা সহজে দ্রবীভূত হয়, তাই এই শিলাগুলিতেও কার্স্ট ভূমিরূপ গঠিত হতে পারে।'},
+      {q: 'সোয়ালো হোলের মুখ থেকে ভূ-অভ্যন্তরে বিস্তৃত সুড়ঙ্গপথটি কী নামে পরিচিত?', opts: ['ডোলাইন', 'পোলজি', 'পোনর (Ponor)', 'উভালা'], ans: 2, exp: 'কার্স্ট অঞ্চলে ভূপৃষ্ঠের জল সোয়ালোহোল দিয়ে ভূগর্ভে প্রবেশ করে। এই সোয়ালোহোলের মুখ থেকে ভূ-অভ্যন্তরে বিস্তৃত উল্লম্ব সুড়ঙ্গপথটিকে পোনর বলা হয়।'},
+      {q: 'কার্স্ট অঞ্চলের চুনাপাথর, ডলোমাইট প্রভৃতি খনিজ প্রধানত কোন্ শিল্পে বেশি ব্যবহৃত হয়?', opts: ['ইস্পাত', 'নির্মাণ', 'সিমেন্ট', 'রাসায়নিক ও ইস্পাত'], ans: 3, exp: 'কার্স্ট অঞ্চলের চুনাপাথর, ডলোমাইট, ক্যালসাইট প্রভৃতি খনিজ সম্পদে পরিপূর্ণ। বিভিন্ন রাসায়নিক ও ইস্পাত শিল্পে এই খনিজদ্রব্যগুলির প্রচুর চাহিদা আছে।'},
+      {q: 'ডোলাইনের গভীরতা সাধারণত কত মিটারের মধ্যে থাকে?', opts: ['২-১০ মিটার', '৫-১০ মিটার', '১০-১৫ মিটার', '১০-২০ মিটার'], ans: 0, exp: 'অধিকাংশ ডোলাইনের ব্যাস ৫০-১০০ মিটার এবং গভীরতা ২ থেকে ১০ মিটারের মধ্যে থাকে। যদিও ক্ষেত্রবিশেষে কিছু ডোলাইনের গভীরতা ১০০ মিটার পর্যন্তও হতে পারে।'}
+    ]
+  },
+  7: {
+    name: 'Set 7',
+    icon: '🏞️',
+    topic: 'কার্স্ট ভূমিরূপ ও হিমবাহ (Karst & Glaciers)',
+    questions: [
+      {q: 'ক্লিন্ট ও গ্রাইকযুক্ত কার্স্ট ভূমি একত্রে কী নামে পরিচিত?', opts: ['চুনাপাথর পেভমেন্ট (Limestone Pavement)', 'কার্স্ট বাতায়ন', 'পিলার', 'পোনর'], ans: 0, exp: 'গ্রাইক ও ক্লিন্ট দিয়ে গঠিত এবড়োখেবড়ো কার্স্ট ভূমিকে একত্রে চুনাপাথর পেভমেন্ট বলা হয়। মধ্যপ্রদেশের দুর্গ জেলায় এর উদাহরণ দেখা যায়।'},
+      {q: 'বড়ো মাপের গ্রাইককে কার্স্ট পরিভাষায় কী বলে?', opts: ['বোগাজ (Bogaz)', 'সিঙ্কহোল', 'সোয়ালো হোল', 'হাম্স'], ans: 0, exp: 'অত্যন্ত বড়ো আকারের গ্রাইককে (সাধারণত চার মিটার প্রশস্ত, পাঁচ মিটার গভীর ও দশ মিটারের বেশি দীর্ঘ হলে) বোগাজ বলে।'},
+      {q: '\'ডোলাইন\' শব্দটি কোন্ শব্দ থেকে এসেছে?', opts: ['ডিলিনা', 'ডোলিনা (Dolina)', 'ডালিনা', 'ডুলিনা'], ans: 1, exp: 'সার্বিয়ান শব্দ \'Dolina\' থেকে \'ডোলাইন\' শব্দটি এসেছে, যার অর্থ \'ভূদৃশ্যের মধ্যে এক অবনমন\'। এটি সিঙ্কহোলেরই নামান্তর।'},
+      {q: 'পৃথিবীর মোট স্থলভাগের প্রায় কত শতাংশ অঞ্চল বর্তমানে বরফাবৃত?', opts: ['৫-৬ %', '১০-১১ %', '২-৩ %', '১৫-১৮ %'], ans: 1, exp: 'কোয়াটারনারি যুগে পৃথিবীর স্থলভাগের ৪০ শতাংশ বরফাবৃত থাকলেও, বর্তমানে জলবায়ু পরিবর্তনের ফলে তা কমে সমগ্র ভূভাগের প্রায় ১১ শতাংশে এসে দাঁড়িয়েছে (মূলত উচ্চ পর্বতগাত্র ও উচ্চ অক্ষাংশে)।'},
+      {q: 'তুষারের ঘনত্ব প্রতি ঘন সেমিতে সাধারণত কত হয়?', opts: ['০.৯৫ গ্রাম', '০.১ গ্রাম', '০.৫ গ্রাম', '১.১ গ্রাম'], ans: 1, exp: 'তুষারে ৪০ শতাংশ বায়ু থাকে, তাই এর ঘনত্ব খুবই কম হয়, সাধারণত প্রতি ঘন সেমিতে ০.১ গ্রাম। ক্রমশ জমাট বাঁধলে ঘনত্ব বেড়ে ফার্ন ও পরে বরফে পরিণত হয়।'},
+      {q: 'তুষার জমাট বেঁধে কঠিন বরফে পরিণত হতে অন্তত কত বছর সময় লাগে?', opts: ['১০০ বছর', '৫০ বছর', '৫ থেকে ১০ বছর', '১ বছর'], ans: 2, exp: 'তুষার জমাট বেঁধে প্রথমে ফার্ন বা নেভেতে পরিণত হয় এবং দীর্ঘদিন সঞ্চয়ের ফলে এই সাদা বরফ আরও জমাট বেঁধে নীলবর্ণের কঠিন বরফে (Glacier ice) পরিণত হতে ৫ থেকে ১০ বছর সময় লাগে।'},
+      {q: 'ভাসমান বরফের স্তূপ বা হিমশৈলের (Iceberg) কত অংশ জলের উপরে থাকে?', opts: ['১/৯ অংশ', '১/১০ অংশ', '২/৫ অংশ', '৮/৯ অংশ'], ans: 0, exp: 'হিমশৈল বা সমুদ্রে ভাসমান বরফের চাঁইয়ের মোট আয়তনের বেশিরভাগ অর্থাৎ ৯ ভাগের ৮ ভাগই জলের মধ্যে ডুবে থাকে। মাত্র ১ ভাগ জলের ওপরে ভেসে থাকে।'},
+      {q: 'হিমবাহের মধ্যে বরফমুক্ত উচ্চ ভূভাগ বা পর্বতশৃঙ্গ কী নামে পরিচিত?', opts: ['ফ্লিকনার', 'পাহাড়', 'নুনাটক (Nunatak)', 'হিমসোপান'], ans: 2, exp: 'মহাদেশীয় হিমবাহের প্রান্তভাগে বরফের স্তর পাতলা থাকে, ফলে বরফের মধ্যে থেকে বরফমুক্ত পর্বতশিখর দ্বীপের ন্যায় মাথা উঁচু করে দাঁড়িয়ে থাকে। এস্কিমোদের ভাষায় একে নুনাটক বলে।'},
+      {q: 'ভারতের হিমালয় পর্বতের বৃহত্তম হিমবাহের নাম কী?', opts: ['সিয়াচেন (Siachen)', 'জেমু', 'গঙ্গোত্রী', 'হিসপার'], ans: 0, exp: 'কারাকোরাম পর্বতে অবস্থিত সিয়াচেন হিমবাহ (দৈর্ঘ্য প্রায় ৭৬ কিমি) হলো ভারতের তথা এশিয়ার বৃহত্তম উপত্যকা হিমবাহ।'},
+      {q: 'বিশ্বের দ্রুততম হিমবাহের নাম কী?', opts: ['পাইন আইল্যান্ড', 'সিয়াচেন', 'হুবার্ড', 'জেকোভসান ইসব্রায়ে (Jakobshavn Isbrae)'], ans: 3, exp: 'গ্রিনল্যান্ডে অবস্থিত জেকোভসান ইসব্রায়ে হলো বিশ্বের অন্যতম দ্রুততম হিমবাহ।'},
+      {q: 'পৃথিবীর বৃহত্তম উপত্যকা হিমবাহের নাম কী?', opts: ['হুবার্ড (Hubbard)', 'ল্যামবার্ট', 'সিয়াচেন', 'আলিচ'], ans: 0, exp: 'আলাস্কায় অবস্থিত হুবার্ড হলো পৃথিবীর বৃহত্তম উপত্যকা বা পার্বত্য হিমবাহ।'},
+      {q: 'পৃথিবীর বৃহত্তম মহাদেশীয় হিমবাহের নাম কী?', opts: ['হুবার্ড', 'ল্যামবার্ট (Lambert)', 'ফেডচেঙ্কো', 'উপসালা'], ans: 1, exp: 'কুমেরু বা অ্যান্টার্কটিকা মহাদেশে অবস্থিত ল্যামবার্ট হলো পৃথিবীর বৃহত্তম মহাদেশীয় হিমবাহ।'},
+      {q: 'নিম্নলিখিত কোনটি পাদদেশীয় হিমবাহের (Piedmont Glacier) একটি আদর্শ উদাহরণ?', opts: ['ম্যাসাসপিনা (Malaspina)', 'ল্যামবার্ট', 'সিয়াচেন', 'আলিচ'], ans: 0, exp: 'মার্কিন যুক্তরাষ্ট্রের আলাস্কা প্রদেশের ম্যাসাসপিনা হলো পৃথিবীর বৃহত্তম ও আদর্শ পর্বতের পাদদেশীয় হিমবাহ, যার ক্ষেত্রফল প্রায় ৩৯০৭ বর্গকিমি।'},
+      {q: 'আল্পস পর্বতের \'মাটারহর্ন\' (Matterhorn) কীসের প্রকৃষ্ট উদাহরণ?', opts: ['পিরামিড চূড়া (Pyramid Peak)', 'এরিটি', 'ড্রামলিন', 'করি'], ans: 0, exp: 'তিন-চারটি করির পশ্চাদপসরণের ফলে মধ্যবর্তী শৃঙ্গটি খাড়া ও তীক্ষ্ণ হয়ে পিরামিডের আকার ধারণ করে। আল্পস পর্বতের মাটারহর্ন হলো এরূপ পিরামিড চূড়া বা হর্ন-এর প্রকৃষ্ট উদাহরণ।'},
+      {q: 'হিমবাহের ক্ষয়কার্যের ফলে সৃষ্ট \'সার্ক\' (Cirque)-কে জার্মান ভাষায় কী বলে?', opts: ['বেসিন', 'কুম', 'করি', 'কার (Kar)'], ans: 3, exp: 'এই হাতলওয়ালা চেয়ারের মতো ভূমিরূপকে ফ্রান্সে সার্ক, স্কটল্যান্ডে করি, ওয়েলসে কুম এবং জার্মান ভাষায় কার বলা হয়।'}
+    ]
+  },
+  8: {
+    name: 'Set 8',
+    icon: '⛷️',
+    topic: 'হিমবাহসৃষ্ট ভূমিরূপ (Glacial Landforms) — পর্ব ২',
+    questions: [
+      {q: 'পৃথিবীর গভীরতম ফিয়র্ডের (Fjord) নাম কী?', opts: ['সোজনে (Sogne)', 'গাইরেঞ্জার', 'কল', 'ফিয়র্ড'], ans: 0, exp: 'হিমবাহ কর্তিত হিমদ্রোণিগুলি সমুদ্রতলে নিমজ্জিত হয়ে ফিয়র্ড তৈরি করে। নরওয়ের সোজনে হলো পৃথিবীর গভীরতম ফিয়র্ড।'},
+      {q: 'হিমবাহের প্রবাহের ফলে উপত্যকার আকৃতি দেখতে কেমন হয়?', opts: ['ইংরেজি I অক্ষরের মতো', 'ইংরেজি V অক্ষরের মতো', 'ইংরেজি U অক্ষরের মতো', 'ইংরেজি Y অক্ষরের মতো'], ans: 2, exp: 'নদী উপত্যকার মধ্য দিয়ে হিমবাহ প্রবাহিত হলে অবঘর্ষ প্রক্রিয়ায় উপত্যকার তলদেশ ও দুই পাশ ক্ষয় পেয়ে চওড়া ও সমতল হয়, ফলে এটি ইংরেজি \'U\' অক্ষরের আকার ধারণ করে (যাকে হিমদ্রোণি বলে)।'},
+      {q: 'বরফের মধ্যে কাদা, বালি, পলি জমতে থাকলে বা সঞ্চিত হলে তাকে কী বলে?', opts: ['আগামুক', 'কেম', 'কেটল', 'টিলাইট (Tillite)'], ans: 3, exp: 'মহাদেশীয় হিমবাহের সঞ্চয়কার্যের ফলে বরফের মধ্যে কাদা, নুড়ি, বালি জমে যে ভূমিরূপ তৈরি হয়, তাকে টিলাইট বলে। কানাডার সুপিরিয়র হ্রদের কাছে এর স্তর দেখা যায়।'},
+      {q: 'কোন্ দেশের হিমবাহ সঞ্চয়জাত উঁচুনীচু ঢিবিগুলি নব (Knob) নামে পরিচিত?', opts: ['স্কটল্যান্ড', 'ফিনল্যান্ড', 'নরওয়ে', 'কানাডা'], ans: 1, exp: 'বহিঃধৌত সমভূমিতে হিমবাহের অসম অবক্ষেপণের ফলে বিভিন্ন শিলাখণ্ড সঞ্চিত হয়ে যে উঁচু ঢিবিগুলি তৈরি করে, ফিনল্যান্ডের দক্ষিণ অংশে তাদের নব (Knob) বলা হয়।'},
+      {q: 'ব্রিটিশ দ্বীপপুঞ্জের নরফোকের গ্লাভেন উপত্যকায় কী জাতীয় ভূমিরূপ প্রচুর দেখা যায়?', opts: ['কেম মঞ্চ (Kame Terrace)', 'এসকার', 'ড্রামলিন', 'কেটল হ্রদ'], ans: 0, exp: 'বরফের গলনসীমায় গলিত জলপ্রবাহের দুই পার্শ্বে সঞ্চিত পলির মঞ্চ আকারে বিন্যাসকে কেম মঞ্চ বলে। গ্লাভেন উপত্যকায় এর অসাধারণ অবস্থিতি লক্ষ করা যায়।'},
+      {q: 'ফিনল্যান্ডের পুনকাহার্যু (Punkaharju) কীসের আদর্শ উদাহরণ?', opts: ['কেম মঞ্চ', 'এসকার (Esker)', 'ড্রামলিন', 'বহিঃধৌত সমভূমি'], ans: 1, exp: 'হিমবাহ ও জলধারার মিলিত সঞ্চয়কার্যের ফলে বালি ও নুড়ি সঞ্চিত হয়ে যে অতি দীর্ঘ ও আঁকাবাঁকা শৈলশিরার মতো ভূমিরূপ তৈরি হয় তাকে এসকার বলে। পুনকাহার্যু হলো এসকারের প্রকৃষ্ট উদাহরণ।'},
+      {q: 'হিমবাহ গলিত জলধারা তলদেশে চন্দ্রকলার মতো খাত তৈরি করলে তাকে কী বলে?', opts: ['সিচেলওয়ালেন (Sichelwannen)', 'ভ্যালি ট্রেন', 'হিমদ্রোণি', 'ক্রিভাস কেম'], ans: 0, exp: 'হিমবাহের তলদেশে বরফ গলে সৃষ্ট জলধারার দ্বারা চন্দ্রকলার আকৃতিবিশিষ্ট যে বাঁকানো খাত সৃষ্টি হয়, তাকে সিচেলওয়ালেন বলে। স্ক্যান্ডিনেভিয়া অঞ্চলে এটি প্রচুর দেখা যায়।'},
+      {q: 'রসে মতানে (Roche Moutonnee) উৎপত্তিতে প্রধানত কোন্ দুটি প্রক্রিয়া দায়ী?', opts: ['উৎপাটন ও সঞ্চয়', 'অবঘর্ষ ও অবক্ষেপ', 'অবঘর্ষ ও উৎপাটন', 'উৎপাটন ও বহন'], ans: 2, exp: 'হিমবাহের প্রবাহপথে কোনো কঠিন শিলা অবস্থান করলে প্রবাহের দিকটি অবঘর্ষ প্রক্রিয়ায় মসৃণ হয় এবং বিপরীত দিকটি উৎপাটন প্রক্রিয়ায় অমসৃণ ও ভগ্ন হয়। এই প্রক্রিয়াই রসে মতানে তৈরি করে।'},
+      {q: 'হিমদ্রোণির তলদেশে সিঁড়ির ধাপের মতো ভূমিরূপের নাম কী?', opts: ['হিমবাহ উপত্যকা', 'ঝুলন্ত উপত্যকা', 'হিমসোপান', 'হিমধাপ বা হিমসিঁড়ি (Glacial Stair)'], ans: 3, exp: 'হিমবাহ উপত্যকার অনুদৈর্ঘ্য ঢাল অসম ক্ষয়ের কারণে একাধিক ধাপের মাধ্যমে ক্রমশ নীচে নামতে থাকলে, তাকে হিমধাপ বা হিমসিঁড়ি বলে।'},
+      {q: 'হিমসিঁড়ির ধাপে জল জমে সৃষ্ট হ্রদ কী নামে পরিচিত?', opts: ['দ্রোণিহ্রদ', 'প্যাটারনস্টার হ্রদ (Paternoster Lake)', 'রাইজার', 'কেটল হ্রদ'], ans: 1, exp: 'হিমসিঁড়ির ধাপগুলিতে বরফগলা জল জমে যে ছোটো ছোটো হ্রদ বা জলার সৃষ্টি হয়, তাদের একত্রে প্যাটারনস্টার হ্রদ বলে।'},
+      {q: '"ডিমভরতি ঝুড়ি" (Basket of egg topography)-র মতো ভূমিরূপ তৈরি হয় কীসের দ্বারা?', opts: ['গ্রাবরেখা', 'এসকার', 'ড্রামলিন (Drumlin)', 'রসে মতানে'], ans: 2, exp: 'হিমবাহের সঞ্চয়কার্যের ফলে উলটানো চামচ বা নৌকার মতো মসৃণ ঢিবি তৈরি হলে তাকে ড্রামলিন বলে। অনেকগুলি ড্রামলিন একত্রে থাকলে তাকে \'ডিমভরতি ঝুড়ি\'র মতো দেখতে লাগে।'},
+      {q: 'হিমবাহের সঞ্চয়কার্যের ফলে গঠিত ভূমিরূপের পর্যায়ক্রমিক সঠিক বিন্যাসটি দেখাও:', opts: ['আগামুক → ড্রামলিন → কেম → কেটল হ্রদ', 'ড্রামলিন → কেম → কেটল হ্রদ → আগামুক', 'কেম → আগামুক → ড্রামলিন → কেটল হ্রদ', 'কেটল হ্রদ → কেম → ড্রামলিন → আগামুক'], ans: 0, exp: 'সাধারণত পর্বতের উচ্চভাগ থেকে নিম্নভাগের দিকে সঞ্চয়ের ক্রমানুসারে প্রথমে বড়ো শিলাখণ্ড (আগামুক), তারপর উপত্যকায় ড্রামলিন ও কেম এবং সবার শেষে বহিঃধৌত সমভূমিতে কেটল হ্রদ গঠিত হয়।'},
+      {q: 'আল্পস অঞ্চলের চারটি হিমযুগের সঠিক পর্যায়ক্রমটি নির্বাচন করো:', opts: ['গুনৎস → উর্ম → রিস → মিন্ডেল', 'মিন্ডেল → উর্ম → রিস → গুনৎস', 'রিস → গুনৎস → উর্ম → মিন্ডেল', 'গুনৎস → মিন্ডেল → রিস → উর্ম'], ans: 3, exp: 'বিজ্ঞানী পেঙ্ক ও ব্রাকনার আল্পস পর্বতে যে চারটি হিমযুগের সন্ধান পান, তাদের সঠিক পর্যায়ক্রম হলো- গুনৎস (Gunz), মিন্ডেল (Mindel), রিস (Riss) এবং উর্ম (Wurm)।'},
+      {q: 'ফিয়র্ডের (Fjords) রাজ্য বলা হয় কোন্ দেশকে?', opts: ['নরওয়েকে', 'আয়ার্ল্যান্ডকে', 'ডেনমার্ককে', 'সুইডেনকে'], ans: 0, exp: 'নরওয়ের উপকূলে অসংখ্য গভীর ফিয়র্ড অবস্থান করায় নরওয়েকে ফিয়র্ডের দেশ বা রাজ্য বলা হয়।'},
+      {q: 'হিমবাহের মধ্যভাগ বাকি অংশের তুলনায় দ্রুত এগোয়। হিমবাহের এই অগ্রভাগ বা প্রান্তভাগকে কী বলে?', opts: ['লোব', 'স্ন আউট (Snout)', 'সিরাক', 'হিমদ্রোণি'], ans: 1, exp: 'উপত্যকা হিমবাহের বরফ গলার প্রান্তীয় অংশ বা গলনসীমার শেষ প্রান্তটিকে স্ন আউট (Snout) বলা হয়, যেখান থেকে সাধারণত জলধারার উৎপত্তি হয়।'}
+    ]
+  },
+  9: {
+    name: 'Set 9',
+    icon: '🌄',
+    topic: 'পুঞ্জক্ষয় (Mass Wasting) — পর্ব ২',
+    questions: [
+      {q: 'শিলার পুঞ্জক্ষয়ের জন্য প্রধানত দায়ী বল কোনটি?', opts: ['বায়ুপ্রবাহ', 'জলস্রোত', 'শিলার অনুষঙ্গ', 'অভিকর্ষজ বল'], ans: 3, exp: 'প্রাকৃতিক মাধ্যম (জল বা বায়ু) ছাড়াই শুধুমাত্র অভিকর্ষজ বল বা মাধ্যাকর্ষণ শক্তির প্রভাবে শিলাখণ্ড উপর থেকে নীচে স্থানান্তরিত হওয়াকেই পুঞ্জক্ষয় বলে।'},
+      {q: 'পুঞ্জক্ষয়ে শিলার চলন প্রধানত কোন্ দিক বরাবর হয়?', opts: ['ঢাল বরাবর', 'শিলার ভরকেন্দ্র বরাবর', 'পার্শ্বচাপ বরাবর', 'প্লবতা বলের দিক বরাবর'], ans: 0, exp: 'পুঞ্জক্ষয়ের ক্ষেত্রে আবহবিকার প্রাপ্ত শিথিল পদার্থসমূহ অভিকর্ষের টানে সর্বদা ভূমিভাগের ঢাল অনুসরণ করে নীচের দিকে প্রবাহিত বা স্থানান্তরিত হয়।'},
+      {q: 'উচ্চভূমি থেকে ঢাল বেয়ে মাটি অত্যন্ত ধীরে ধীরে নীচে নামলে তাকে কী বলে?', opts: ['প্রপাত', 'পতন', 'মাটি বিসর্পণ (Soil Creep)', 'মাটি প্রবাহ'], ans: 2, exp: 'উচ্চ ভূমিভাগ থেকে মৃত্তিকা বা আবহবিকারগ্রস্ত পদার্থ ঢাল বেয়ে অত্যন্ত ধীর গতিতে (বছরে এক সেমি বা তার কম) নীচে নেমে এলে তাকে মৃত্তিকা বিসর্পণ বা Soil Creep বলে।'},
+      {q: 'পুঞ্জক্ষয়ের বিভিন্ন প্রকৃতির (ধীরপ্রবাহ, দ্রুতপ্রবাহ, ভূমিধস, অবনমন) সুস্পষ্ট ও বিস্তৃত বৈজ্ঞানিক ব্যাখ্যা কে প্রদান করেন?', opts: ['সি. এফ. এস. শার্প (C. F. S. Sharpe)', 'আর. জে. চোরলে (R. J. Chorley)', 'জে. জি. আন্ডারসন (J. G. Anderson)', 'এ. এল. ওয়াশবার্ন (A. L. Washburn)'], ans: 0, exp: '১৯৩৮ সালে ভূবিজ্ঞানী শার্প সর্বপ্রথম পুঞ্জক্ষয়ের প্রকৃতি সম্পর্কে বিস্তৃত সমীক্ষা করেন এবং একে চারটি প্রধান ভাগে বিভক্ত করেন।'},
+      {q: '\'সলিফ্লাকশন\' (Solifluction) শব্দটির প্রথম পরিচয় ঘটান কোন্ বিজ্ঞানী?', opts: ['সি. এফ. এস. শার্প', 'আর. জে. চোরলে', 'জে. জি. আন্ডারসন (J. G. Anderson)', 'এ. এল. ওয়াশবার্ন'], ans: 2, exp: '\'সলিফ্লাকশন\' বা মৃত্তিকা প্রবাহন শব্দটি ১৯০৬ সালে বিজ্ঞানী আন্ডারসন সর্বপ্রথম ব্যবহার করেন। এটি উচ্চ অক্ষাংশে বরফগলা জলে সম্পৃক্ত মাটির দ্রুত প্রবাহকে নির্দেশ করে।'},
+      {q: 'বিসর্পণের ফলে বিপরীত ঢালে ছোটো ছোটো সিঁড়ির মতো ধাপের সৃষ্টি হলে তাকে কী বলে?', opts: ['লহর', 'লোব', 'কাদাশঙ্কু', 'টেরাক্যাটস (Terracettes)'], ans: 3, exp: 'পুঞ্জক্ষয়ের বিসর্পণ প্রক্রিয়ায় আকস্মিক পতনের প্রভাবে বিচ্যুত উপাদানসমূহ পিছনের দিকে ঘুরে যাওয়ার জন্য প্রধান ঢালের উপরিভাগে কিছু ক্ষুদ্র মঞ্চ বা ধাপের সৃষ্টি হয়, এদের টেরাক্যাটস বলে।'},
+      {q: 'চিরহিমায়িত অঞ্চলে পর্বতের পাদদেশে সলিফ্লাকশন প্রক্রিয়ায় সঞ্চিত শিলাখণ্ডের দ্বারা গঠিত ত্রিকোণ ভূমিরূপের বিশেষ নাম কী?', opts: ['লহর', 'ডেট্রিটাল ফ্যান (Detrital Fan)', 'লোব', 'স্কার্পলেটস'], ans: 1, exp: 'পেরিগ্লেসিয়াল অঞ্চলে সলিফ্লাকশন প্রক্রিয়ায় বিচ্ছিন্ন শিলাখণ্ডগুলি ঢাল বরাবর নীচে নেমে পর্বতের পাদদেশে বদ্বীপের মতো যে ত্রিকোণ সঞ্চয় সৃষ্টি করে, তাকে ডেট্রিটাল ফ্যান বলে।'},
+      {q: 'অবনমনের (Subsidence) ক্ষেত্রে পদার্থের কী জাতীয় সরণ বা চলন লক্ষ করা যায়?', opts: ['সমান্তরাল', 'আবর্তনশীল', 'উল্লম্ব (Vertical)', 'কৌণিক'], ans: 2, exp: 'অবনমনের ক্ষেত্রে ভূমি ঢালের ওপর সঞ্চিত মৃত্তিকা বা শিলাখণ্ড ঢাল বরাবর না গড়িয়ে সরাসরি উল্লম্বভাবে বা সোজাসুজি নীচের দিকে বসে যায়।'},
+      {q: 'মৃত্তিকা বা শিথিল ধ্বংসাবশেষের আবর্তনমুখী ঘূর্ণায়ন ছাড়াই খাড়া ঢাল বরাবর গড়িয়ে দ্রুত নেমে আসাকে কী বলে?', opts: ['ভগ্নস্তূপ ধস (Debris Slide)', 'ভগ্নস্তূপ পতন', 'শিলা ধস', 'স্লাম্প'], ans: 0, exp: 'শিথিল মৃত্তিকা বা শিলাখণ্ডের পুঞ্জ আবর্তন ছাড়াই গড়িয়ে ঢাল বেয়ে নীচের দিকে দ্রুত অবতরণ করলে, তাকে ভগ্নস্তূপ ধস বা ডেব্রিজ স্লাইড বলে।'},
+      {q: 'পুঞ্জক্ষয়ের পদার্থসমূহে জলযুক্ত হলে ঢাল বরাবর পদার্থসমূহ নীচে নেমে কানের লতির মতো যে আকৃতি গঠন করে, তাকে কী বলে?', opts: ['লোব (Lobe)', 'বিসর্পণ', 'স্যুট', 'স্লাম্প'], ans: 0, exp: 'কর্দম প্রবাহ বা সলিফ্লাকশন প্রক্রিয়ায় সম্পৃক্ত পদার্থসমূহ প্রবাহিত হয়ে হিমবাহ প্রবাহের শেষ প্রান্তে বা সামনের অংশে কানের লতির মতো আকৃতিবিশিষ্ট যে পিণ্ডাকৃতি ভূমিরূপ সৃষ্টি করে, তাকে লোব বলে।'},
+      {q: 'খাড়া ঢালের ওপরের অংশ থেকে কোনো মাধ্যম ছাড়া শিলাস্তূপের সোজাসুজি নীচে মুক্ত পতনকে কী বলে?', opts: ['প্রবাহ', 'শিলা সম্প্রপাত', 'শিলা পতন (Rock Fall)', 'শিলা বিসর্পণ'], ans: 2, exp: 'অত্যন্ত খাড়া ঢাল থেকে যখন কোনো শিলাখণ্ড মাধ্যাকর্ষণের টানে মুক্ত অবস্থায় সরাসরি নীচে পড়ে যায় বা গড়িয়ে পড়ে, তখন তাকে শিলা পতন বলে।'},
+      {q: 'চ্যুতিতল বা শিলার দারণ বরাবর শিলাখণ্ডের গড়িয়ে বা খাড়াভাবে পতনকে কী বলে?', opts: ['শিলা ধস (Rock Slide)', 'শিলা বিসর্পণ', 'শিলা পতন', 'শিলা প্রবাহ'], ans: 0, exp: 'স্তরায়ণ তল বা চ্যুতিতল বরাবর আদি শিলা থেকে বিচ্ছিন্ন হয়ে বিশালাকৃতির শিলাখণ্ডের পাহাড়ের ঢাল বেয়ে অত্যন্ত দ্রুত অপসারণকে শিলা ধস বা রক স্লাইড বলে।'},
+      {q: 'প্লাইস্টোসিন বা হিমযুগে কোন্ পুঞ্জক্ষয় প্রক্রিয়া ভূমিরূপ গঠনে বিশাল ভূমিকা গ্রহণ করেছিল?', opts: ['সলিফ্লাকশন (Solifluction)', 'বিসর্পণ', 'শিলা পতন', 'অবনমন'], ans: 0, exp: 'চিরহিমায়িত বা পেরিগ্লেসিয়াল অঞ্চলে তুষারগলা জলে সম্পৃক্ত মৃত্তিকার প্রবাহ অর্থাৎ সলিফ্লাকশন প্রক্রিয়া খুব কার্যকরী। প্লাইস্টোসিন হিমযুগে এই প্রক্রিয়াই ভূমিরূপ গঠনে বিশাল ভূমিকা নিয়েছিল।'},
+      {q: 'ক্যালিফোর্নিয়ার সিয়েরা-নেভাদা অঞ্চলে কোন্ পুঞ্জক্ষয় বিশেষভাবে দেখা যায়?', opts: ['কর্দম প্রবাহ', 'ট্যালাস বিসর্পণ (Talus Creep)', 'অবনমন', 'মৃত্তিকা প্রবাহ'], ans: 1, exp: 'পাহাড়ের গায়ে যান্ত্রিক আবহবিকারে সৃষ্ট কোণাকৃতি শিলাস্তূপ বা ট্যালাস যখন খুব ধীরে ধীরে ঢাল বরাবর নীচে নামতে থাকে, তখন তাকে ট্যালাস বিসর্পণ বলে। সিয়েরা-নেভাদায় এটি খুব সাধারণ ঘটনা।'},
+      {q: 'আকস্মিক পতন বা স্লাম্প (Slump) প্রক্রিয়া মূলত কোন্ অঞ্চলে বেশি কার্যকরী হয়?', opts: ['উপকূলীয় অঞ্চলে', 'শুষ্ক অঞ্চলে', 'সমভূমি অঞ্চলে', 'মরু অঞ্চলে'], ans: 0, exp: 'সমুদ্রতরঙ্গ বা নদীর ক্ষয়কার্যের ফলে ঢালের নীচের অংশ কর্তিত হলে ওপরের শিলাখণ্ডগুলি আবর্তাকারে ধসে পড়ে। তাই আকস্মিক পতন প্রক্রিয়া মূলত উপকূলীয় অঞ্চলের সমুদ্রপাড় ও নদী পাড়েই বেশি সংঘটিত হয়।'}
+    ]
+  },
+  10: {
+    name: 'Set 10',
+    icon: '📝',
+    topic: 'ইউনিট ২ - বিবিধ (Mixed Review)',
+    questions: [
+      {q: '\'জেলিফ্লাকশন\' (Gelifluction) শব্দটি প্রথম কোন্ বিজ্ঞানী ব্যবহার করেন?', opts: ['ভারনেস', 'চোরলে', 'এ. এল. ওয়াশবার্ন (A. L. Washburn)', 'শার্প'], ans: 2, exp: 'হিমবাহ অধ্যুষিত অঞ্চলের প্রান্তে ভর সঞ্চলনের এক বিশেষ ধরনের সলিফ্লাকশন প্রক্রিয়াকে জেলিফ্লাকশন বলে। বিজ্ঞানী ওয়াশবার্ন এই শব্দটির প্রথম ব্যবহার করেন।'},
+      {q: 'শিলা বা মাটির মোট আয়তনের সাপেক্ষে তার মধ্যে থাকা রন্ধ্র বা শূন্যস্থানের মোট আয়তনের শতকরা অনুপাতকে কী বলে?', opts: ['প্রবেশ্যতা', 'সচ্ছিদ্রতা (Porosity)', 'সম্পৃক্ততা', 'দ্রবণ ক্ষমতা'], ans: 1, exp: 'কোনো শিলা বা মাটির ভেতরে থাকা ফাঁকা স্থান বা রন্ধ্রের পরিমাণকে সচ্ছিদ্রতা বলে। এর শতকরা হার বেশি হলে ভৌমজলের সঞ্চয়ও বেশি হয়।'},
+      {q: 'কার্স্ট অঞ্চলে পোলজির (Polje) ভিতরে চুনাপাথরের অবশিষ্ট টিলাগুলিকে কী বলা হয়?', opts: ['মোনাডনক', 'ইনসেলবার্গ', 'হাম্স (Hums)', 'গায়ট'], ans: 2, exp: 'দ্রবণ প্রক্রিয়ায় পোলজির মাঝখানে অবশিষ্টাংশ হিসেবে দাঁড়িয়ে থাকা অদ্রাব্য শিলার টিলাগুলিকে হাম্স বা হে স্ট্যাক পাহাড় বলে।'},
+      {q: 'কার্স্ট ভূমিরূপের বিবর্তনের সঠিক ক্রমটি কী?', opts: ['সোয়ালো হোল → সিঙ্কহোল → উভালা → পোলজি', 'পোলজি → উভালা → সোয়ালো হোল → সিঙ্কহোল', 'সিঙ্কহোল → পোলজি → সোয়ালো হোল → উভালা', 'উভালা → সিঙ্কহোল → পোলজি → সোয়ালো হোল'], ans: 0, exp: 'প্রথমে ছোটো গর্ত সোয়ালো হোল তৈরি হয়, যা বড়ো হয়ে সিঙ্কহোল বা ডোলাইন গঠন করে। একাধিক সিঙ্কহোল মিলে উভালা এবং তা আরও বড়ো হয়ে পোলজির সৃষ্টি করে।'},
+      {q: 'জমাট বাঁধা বৃষ্টিবিন্দু বা বরফ ও বৃষ্টির মিশ্রণকে সাধারণভাবে কী বলা হয়?', opts: ['বরফ দানা', 'স্লিট (Sleet)', 'শিলা', 'তুহিন'], ans: 1, exp: 'ভূপৃষ্ঠের বায়ুস্তর খুব শীতল হলে বৃষ্টিবিন্দু ভূমি স্পর্শ করার আগেই বরফের গুলি বা বটিকায় পরিণত হয়, একে স্লিট বলে।'},
+      {q: 'আল্পস অঞ্চলে বহিঃধৌত সমভূমির সঞ্চয় কী নামে পরিচিত?', opts: ['স্যান্ডার', 'ডেকেন শটার (Decken Schotter)', 'বিডেড এসকার', 'কেম'], ans: 1, exp: 'আল্পস পার্বত্য অঞ্চলে হিমবাহ গলিত জলধারার দ্বারা সৃষ্ট বহিঃধৌত সমভূমির সঞ্চয়কে ডেকেন শটার বলা হয়।'},
+      {q: 'আইসল্যান্ডে হিমবাহের বিনুনিরূপ সঞ্চয়ে যে ব্যবচ্ছিন্ন সমভূমি তৈরি হয়, তার নাম কী?', opts: ['ডেকেন শটার', 'স্যান্ডার (Sandur)', 'বিডেড এসকার', 'ভ্যালি ট্রেন'], ans: 1, exp: 'বহিঃধৌত সমভূমির ওপর নদী ব্যবস্থা বিস্তার লাভ করলে সেটি বিচ্ছিন্ন হয়ে যায় যাকে ভ্যালি ট্রেন বলে। আইসল্যান্ডে এই বিনুনিরূপী ব্যবচ্ছিন্ন সমভূমি স্যান্ডার নামে পরিচিত।'},
+      {q: 'শীতল বাতাসের সংস্পর্শে আর্দ্র বাতাস এলে নীচের কোন্ ঘনীভূত রূপটি সৃষ্টি হয়?', opts: ['শিশির', 'হালকা বরফ', 'স্লিট', 'কুয়াশা (Fog)'], ans: 3, exp: 'ভূপৃষ্ঠের নিকট জলীয় বাষ্পপূর্ণ আর্দ্র বায়ু শীতল বাতাসের সংস্পর্শে এলে ঘনীভূত হয়ে ভাসমান ক্ষুদ্র ক্ষুদ্র জলকণার সৃষ্টি করে, যা কুয়াশা নামে পরিচিত।'},
+      {q: 'পৃথিবীর যাবতীয় অধঃক্ষেপণের কতভাগ বৃষ্টিরূপে পতিত হয়?', opts: ['৬০%', '৭০%', '৮০%', '৯০%'], ans: 2, exp: 'মেঘ থেকে জলীয় বাষ্পের বিভিন্ন ঘনীভূত রূপের মধ্যে সবচেয়ে বেশি পরিমাণ অর্থাৎ ৮০ শতাংশই তরল বৃষ্টিবিন্দুরূপে ভূপৃষ্ঠে পতিত হয়।'},
+      {q: 'হিমবাহের প্রবাহের দিকটি মসৃণ ও বিপরীত দিকটি উৎপাটন প্রক্রিয়ায় অমসৃণ হয়, এমন ভূমিরূপটি হলো-', opts: ['ড্রামলিন', 'রসে মতানে (Roche Moutonnee)', 'ক্র্যাগ ও টেল', 'এসকার'], ans: 1, exp: 'হিমবাহের প্রবাহপথে কোনো কঠিন শিলা অবস্থান করলে প্রবাহের দিকটি অবঘর্ষ প্রক্রিয়ায় মসৃণ এবং বিপরীত দিকটি উৎপাটন প্রক্রিয়ায় এবড়োখেবড়ো হয়, একে রসে মতানে বলে।'},
+      {q: 'স্ট্যালাকটাইট ও স্ট্যালাগমাইট ক্রমশ বৃদ্ধি পেয়ে পরস্পর যুক্ত হয়ে গেলে তাকে কী বলে?', opts: ['গুহা', 'গুহা স্তম্ভ (Cave Pillar)', 'হাম্স', 'ডোলাইন'], ans: 1, exp: 'গুহার ছাদ থেকে নামতে থাকা স্ট্যালাকটাইট ও নীচ থেকে ওপরের দিকে বাড়তে থাকা স্ট্যালাগমাইট যুক্ত হয়ে একটি দণ্ডে পরিণত হলে, তাকে গুহা স্তম্ভ বলে।'},
+      {q: 'ছত্তিশগড়ের রায়পুর জেলার মধ্যভাগে শেল দ্বারা গঠিত হাম্সগুলিকে স্থানীয় ভাষায় কী বলে?', opts: ['মোগোতেস', 'রাবণভাটা (Ravanbhata)', 'কন্দর', 'ড্রিপস্টোন'], ans: 1, exp: 'পোলজির মধ্যে থাকা অবশিষ্ট টিলা বা হাম্সগুলি ছত্তিশগড়ের রায়পুরে স্থানীয়দের কাছে রাবণভাটা নামে পরিচিত।'},
+      {q: 'চুনাপাথরের গুহার ছাদ থেকে কীলক বা ছুরির ফলার মতো আকৃতির অভিক্ষিপ্ত পাথরের টুকরোকে কী বলে?', opts: ['স্ট্যালাগমাইট', 'হেলিকটাইট', 'অ্যানথোডাইট', 'রুফ পেনডেন্ট (Roof Pendant)'], ans: 3, exp: 'গুহার ছাদে জলের সাথে দ্রবীভূত চুন জমে ছুরির ফলার মতো ঝুলে থাকলে তাকে রুফ পেনডেন্ট বলে।'},
+      {q: 'মৃত্তিকা প্রবাহ বা Earth flow প্রধানত কোন্ জলবায়ু অঞ্চলে বেশি দেখা যায়?', opts: ['শুষ্ক অঞ্চলে', 'আর্দ্র অঞ্চলে', 'মরু অঞ্চলে', 'নিরক্ষীয় অঞ্চলে'], ans: 1, exp: 'ভূমিপ্রবাহ বা মৃত্তিকা প্রবাহ প্রধানত আর্দ্র অঞ্চলে গ্রীষ্মকালে দেখা যায়। প্রবল বৃষ্টিপাতের ফলে মৃত্তিকা জলের সংস্পর্শে সম্পৃক্ত হয়ে এই প্রবাহের সৃষ্টি করে।'},
+      {q: 'ভারতের কোনো দ্বীপ অঞ্চলে উল্লেখযোগ্য কার্স্ট গুহা বা কার্স্ট ভূমিরূপ দেখা যায়?', opts: ['লাক্ষাদ্বীপ', 'মাজুলি', 'বারাতং, আন্দামান (Baratang, Andaman)', 'সাগর দ্বীপ'], ans: 2, exp: 'ভারতের আন্দামান দ্বীপপুঞ্জের বারাতং দ্বীপে চুনাপাথরের গুহা, স্ট্যালাকটাইট, স্ট্যালাগমাইট-সহ নানা কার্স্ট ভূমিরূপের নিদর্শন পাওয়া যায়।'}
+    ]
+  }
+};
+
+// ============================================================
+//  গ্লোবাল ভেরিয়েবল
+// ============================================================
+const LABELS = ['ক', 'খ', 'গ', 'ঘ'];
+let currentSetId = 1;
+let cur = 0, score = 0, wrong = 0, answered = false, timerInterval, timeLeft = 10 * 60;
+let userAnswers = [];
+let isLoggedIn = false;
+let currentUser = null;
+let pendingSetId = null;
+
+// ============================================================
+//  হাব পেজ বিল্ড
+// ============================================================
+function buildHub() {
+  const grid = document.getElementById('setGrid');
+  grid.innerHTML = '';
+  for (let i = 1; i <= TOTAL_SETS; i++) {
+    const set = allSets[i];
+    const card = document.createElement('div');
+    card.className = 'set-card';
+    card.innerHTML = `
+      <div class="icon">${set.icon}</div>
+      <div class="set-num">${set.name}</div>
+      <div class="set-title">${set.topic}</div>
+      <div class="set-meta"><span>১৫ প্রশ্ন</span><span>১০ মিনিট</span></div>
+    `;
+    card.onclick = () => selectSet(i);
+    grid.appendChild(card);
+  }
+}
+
+function showHub() {
+  document.getElementById('hubPage').classList.remove('hidden');
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('timerBox').classList.remove('danger');
+  clearInterval(timerInterval);
+  if (currentUser) {
+    document.getElementById('hubUserInfo').innerHTML = `👤 ${currentUser.username} — Test দিতে সেট সিলেক্ট করো।`;
+  } else {
+    document.getElementById('hubUserInfo').innerHTML = '';
+  }
+}
+
+function goToHub() {
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('hubPage').classList.remove('hidden');
+  document.getElementById('timerBox').classList.remove('danger');
+  clearInterval(timerInterval);
+  isLoggedIn = false;
+  currentUser = null;
+}
+
+// ============================================================
+//  সেট সিলেক্ট - সবসময় লগইন চেক
+// ============================================================
+function selectSet(id) {
+  currentSetId = id;
+  const set = allSets[id];
+  pendingSetId = id;
+  document.getElementById('loginSetName').textContent = `📚 ${set.name} — ${set.topic}`;
+  document.getElementById('loginOverlay').classList.add('active');
+  document.getElementById('loginUsername').value = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').style.display = 'none';
+  document.getElementById('limitInfo').style.display = 'none';
+  document.getElementById('loginBtn').disabled = false;
+  document.getElementById('loginUsername').focus();
+}
+
+// ============================================================
+//  লগইন ফাংশন
+// ============================================================
+function doLoginFromSet() {
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+  const errorEl = document.getElementById('loginError');
+  const limitInfo = document.getElementById('limitInfo');
+  const loginBtn = document.getElementById('loginBtn');
+
+  if (!username || !password) {
+    errorEl.textContent = '❌ দয়া করে ইউজারনেম ও পাসওয়ার্ড দিন।';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  const user = userData.find(u => u.username === username && u.password === password);
+  if (user) {
+    const setAttempts = user.attempts[currentSetId] || 0;
+    if (setAttempts >= MAX_ATTEMPTS) {
+      limitInfo.style.display = 'block';
+      document.getElementById('limitMsg').textContent = `আপনি এই অ্যাকাউন্ট দিয়ে ${allSets[currentSetId].name} এর সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন। আর Test দেওয়া সম্ভব নয়।`;
+      errorEl.style.display = 'none';
+      loginBtn.disabled = true;
+      return;
+    }
+    
+    isLoggedIn = true;
+    currentUser = user;
+    errorEl.style.display = 'none';
+    limitInfo.style.display = 'none';
+    loginBtn.disabled = false;
+    document.getElementById('loginOverlay').classList.remove('active');
+    
+    document.getElementById('hubUserInfo').innerHTML = `👤 ${currentUser.username} — Test দিতে সেট সিলেক্ট করো।`;
+    
+    startQuiz(currentSetId);
+  } else {
+    errorEl.textContent = '❌ ভুল ইউজারনেম বা পাসওয়ার্ড। আবার চেষ্টা করুন।';
+    errorEl.style.display = 'block';
+    limitInfo.style.display = 'none';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLoginFromSet();
+  });
+  document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLoginFromSet();
+  });
+  buildHub();
+  document.getElementById('hubPage').classList.remove('hidden');
+  document.getElementById('testArea').classList.add('hidden');
+  document.getElementById('resultWrap').classList.remove('show');
+});
+
+// ============================================================
+//  কুইজ ফাংশন
+// ============================================================
+function startQuiz(setId) {
+  if (!isLoggedIn || !currentUser) return;
+  
+  const setAttempts = currentUser.attempts[setId] || 0;
+  if (setAttempts >= MAX_ATTEMPTS) {
+    alert(`⚠️ আপনি এই সেটের সর্বোচ্চ ${MAX_ATTEMPTS} বার Test দিয়েছেন।`);
+    return;
+  }
+  
+  currentUser.attempts[setId] = (currentUser.attempts[setId] || 0) + 1;
+  
+  cur = 0; score = 0; wrong = 0; answered = false;
+  timeLeft = 10 * 60; userAnswers = [];
+  document.getElementById('hubPage').classList.add('hidden');
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.remove('hidden');
+  document.getElementById('timerBox').classList.remove('danger');
+  
+  const set = allSets[setId];
+  document.getElementById('testSetLabel').textContent = set.name;
+  document.getElementById('testSetName').textContent = 'ভূগোল';
+  document.getElementById('testTopic').textContent = set.topic;
+  
+  clearInterval(timerInterval);
+  timerInterval = setInterval(tick, 1000);
+  loadQ();
+}
+
+function tick() {
+  timeLeft--;
+  const m = Math.floor(timeLeft / 60);
+  const s = timeLeft % 60;
+  document.getElementById('timerDisplay').textContent = m + ':' + (s < 10 ? '0' : '') + s;
+  if (timeLeft <= 60) document.getElementById('timerBox').classList.add('danger');
+  if (timeLeft <= 0) { clearInterval(timerInterval); showResult(); }
+}
+
+function loadQ() {
+  answered = false;
+  const set = allSets[currentSetId];
+  const q = set.questions[cur];
+  document.getElementById('qNum').textContent = 'প্রশ্ন ' + (cur + 1) + ' / ' + set.questions.length;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('progressFill').style.width = ((cur + 1) / set.questions.length * 100) + '%';
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('nextBtn').textContent = cur === set.questions.length - 1 ? 'ফলাফল দেখো' : 'পরবর্তী →';
+  document.getElementById('explanation').classList.remove('show');
+
+  const opts = document.getElementById('qOpts');
+  opts.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.innerHTML = '<div class="opt-circle">' + LABELS[i] + '</div><div class="opt-text">' + o + '</div>';
+    btn.onclick = () => answer(i);
+    opts.appendChild(btn);
+  });
+}
+
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const set = allSets[currentSetId];
+  const q = set.questions[cur];
+  userAnswers[cur] = i;
+  const btns = document.querySelectorAll('.opt');
+  btns.forEach(b => b.classList.add('disabled'));
+  btns[q.ans].classList.add('correct');
+  if (i !== q.ans) { btns[i].classList.add('wrong'); wrong++; }
+  else score++;
+  document.getElementById('scoreShow').textContent = 'সঠিক: ' + score + ' | ভুল: ' + wrong;
+  document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQ() {
+  const set = allSets[currentSetId];
+  cur++;
+  if (cur >= set.questions.length) { clearInterval(timerInterval); showResult(); return; }
+  loadQ();
+}
+
+function showResult() {
+  document.getElementById('testArea').classList.add('hidden');
+  const rw = document.getElementById('resultWrap');
+  rw.classList.add('show');
+  const set = allSets[currentSetId];
+  const pct = Math.round(score / set.questions.length * 100);
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('rbCorrect').textContent = score;
+  document.getElementById('rbWrong').textContent = wrong;
+  document.getElementById('rbPct').textContent = pct + '%';
+  
+  const remaining = MAX_ATTEMPTS - (currentUser.attempts[currentSetId] || 0);
+  document.getElementById('attemptInfo').innerHTML = `👤 ${currentUser.username} — ${set.name}: বাকি আছে <strong>${remaining}</strong> বার Test দেওয়ার সুযোগ (সর্বোচ্চ ${MAX_ATTEMPTS} বার)`;
+  
+  const grades = [
+    [90, '🌟', 'অসাধারণ!'],
+    [70, '👍', 'খুব ভালো!'],
+    [50, '📚', 'ভালো চেষ্টা!'],
+    [0, '💪', 'চেষ্টা চালিয়ে যাও!']
+  ];
+  const g = grades.find(x => pct >= x[0]);
+  document.getElementById('resultIcon').textContent = g[1];
+  document.getElementById('resultGrade').textContent = g[2] + ' (' + set.topic + ')';
+}
+
+function showReview() {
+  document.getElementById('resultWrap').classList.remove('show');
+  document.getElementById('testArea').classList.remove('hidden');
+  cur = 0;
+  loadReview();
+}
+
+function loadReview() {
+  const set = allSets[currentSetId];
+  if (cur >= set.questions.length) { 
+    document.getElementById('testArea').classList.add('hidden'); 
+    document.getElementById('resultWrap').classList.add('show'); 
+    return; 
+  }
+  const q = set.questions[cur];
+  document.getElementById('qNum').textContent = 'Review — প্রশ্ন ' + (cur + 1) + ' / ' + set.questions.length;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('progressFill').style.width = ((cur + 1) / set.questions.length * 100) + '%';
+  document.getElementById('nextBtn').disabled = false;
+  document.getElementById('nextBtn').textContent = cur === set.questions.length - 1 ? 'শেষ করো' : 'পরবর্তী →';
+  document.getElementById('nextBtn').onclick = () => { cur++; loadReview(); };
+
+  const opts = document.getElementById('qOpts');
+  opts.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt disabled';
+    if (i === q.ans) btn.classList.add('correct');
+    else if (userAnswers[cur] === i) btn.classList.add('wrong');
+    btn.innerHTML = '<div class="opt-circle">' + LABELS[i] + '</div><div class="opt-text">' + o + '</div>';
+    opts.appendChild(btn);
+  });
+
+  document.getElementById('explanationText').innerHTML = '<strong>ব্যাখ্যা:</strong> ' + q.exp;
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('scoreShow').textContent = 'সবুজ = সঠিক উত্তর';
+}
+</script>
+
+</body>
+</html>
